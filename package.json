@@ -1,0 +1,13 @@
+{
+  "name": "md-anderson-donation-clone",
+  "version": "1.0.0",
+  "description": "Localhost clone of MD Anderson Donation Portal (tsid=37435)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}
