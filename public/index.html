@@ -3,32 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArgoCar - Consultas Veiculares, CRLV e Dados de Proprietários | Todo Brasil</title>
-    <meta name="description" content="Emissão de CRLV digital, consulta de débitos, histórico veicular, score e dados de proprietários. Atendemos 27 estados + DF. Valores via WhatsApp.">
+    <title>ArgoCar - Consultas Veiculares, CRLV e Dados de Proprietários</title>
+    <meta name="description" content="Emissão de CRLV digital, consulta de débitos, histórico veicular, score e dados de proprietários. 27 estados + DF.">
     <meta name="theme-color" content="#0066cc">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ArgoCar - CRLV e Consultas Veiculares em Todo Brasil">
-    <meta property="og:description" content="Emissão de CRLV digital, consulta de débitos, histórico, score e proprietários. 27 estados + DF.">
-    <meta property="og:url" content="https://kleiberlopes.github.io/Argonauts/">
-    <meta property="og:site_name" content="ArgoCar">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="ArgoCar - CRLV e Consultas Veiculares">
+    <meta property="og:description" content="Emissão de CRLV, consulta de débitos, histórico, score e proprietários. Todo Brasil.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "ArgoCar",
-      "description": "Consultas veiculares, emissão de CRLV digital, histórico de veículos, score e dados de proprietários em todo Brasil",
-      "url": "https://kleiberlopes.github.io/Argonauts/",
-      "telephone": "+55 84 92183-8594",
-      "address": { "@type": "PostalAddress", "addressCountry": "BR" },
-      "priceRange": "Sob consulta",
-      "areaServed": "BR"
-    }
-    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -44,595 +28,532 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #334155; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        .sb::-webkit-scrollbar { width: 4px; }
+        .sb::-webkit-scrollbar-track { background: transparent; }
+        .sb::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased" x-data="{
-    whatsappNumber: '5584921838594',
-    placa: '',
-    cpf: '',
-    selectedService: null,
-    showVideo: false,
-    copied: false,
-    leftOpen: false,
-    rightOpen: false,
-    activeSection: 'inicio',
-    services: {
-        crlv: { name:'Emissão CRLV Digital', desc:'Licenciamento anual - 27 estados + DF', icon:'fa-solid fa-file-lines', iconBg:'bg-brand-500/10 text-brand-400', price:0 },
-        completa: { name:'Consulta Completa', desc:'Débitos + Histórico + Score + Proprietário', icon:'fa-solid fa-magnifying-glass-chart', iconBg:'bg-emerald-500/10 text-emerald-400', price:0 },
-        historico: { name:'Histórico Veicular', desc:'Leilão + Sinistro + Roubo/Furto + Restrições', icon:'fa-solid fa-gavel', iconBg:'bg-amber-500/10 text-amber-400', price:0 },
-        proprietario: { name:'Dados Proprietário', desc:'Localização + Telefone + CPF + Endereço', icon:'fa-solid fa-user-shield', iconBg:'bg-blue-500/10 text-blue-400', price:0 }
-    },
-    selectService(k){ this.selectedService = k; },
-    get serviceName(){ return this.services[this.selectedService]?.name||''; },
-    get serviceDesc(){ return this.services[this.selectedService]?.desc||''; },
-    get serviceIcon(){ return this.services[this.selectedService]?.icon||''; },
-    get serviceIconBg(){ return this.services[this.selectedService]?.iconBg||''; },
-    get servicePrice(){ return this.services[this.selectedService]?.price||0; },
-    formatPrice(v){ return (!v||v===0) ? 'Sob consulta' : 'R$ '+v.toFixed(2).replace('.',','); },
-    sendPlacaQuery(){ if(!this.placa){return;} const m=encodeURIComponent(`Olá! Gostaria de consultar a placa: ${this.placa.toUpperCase()}. Qual o valor?`); window.open(`https://wa.me/${this.whatsappNumber}?text=${m}`,'_blank'); },
-    sendCpfQuery(){ if(!this.cpf){return;} const m=encodeURIComponent(`Olá! Gostaria de consultar o CPF/CNPJ: ${this.cpf}. Como funciona?`); window.open(`https://wa.me/${this.whatsappNumber}?text=${m}`,'_blank'); },
-    copyPixKey(){ navigator.clipboard.writeText('08184307454'); this.copied=true; setTimeout(()=>this.copied=false,2000); },
-    sendPixConfirm(){ const s=this.services[this.selectedService]; const m=encodeURIComponent(`Olá! Realizei o PIX para: ${s?.name||'Consulta'}.\\n\\nChave: 081.843.074-54 (Anderson Jorge Cruz Galvao)\\nValor: ${this.formatPrice(s?.price)}\\n\\nSegue comprovante. Aguardando ligação.`); window.open(`https://wa.me/${this.whatsappNumber}?text=${m}`,'_blank'); },
-    openWhatsApp(){ window.open(`https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre os serviços da ArgoCar.')}`,'_blank'); },
-    setActive(id){ this.activeSection=id; this.leftOpen=false; }
-}">
 
-<!-- ============================================ -->
-<!-- MOBILE HEADER -->
-<!-- ============================================ -->
+<body class="bg-slate-950 text-slate-100 font-sans antialiased"
+    x-data="{
+        tel: '5584921838594',
+        placa: '',
+        cpf: '',
+        svc: null,
+        showVid: false,
+        copied: false,
+        mobileLeft: false,
+        mobileRight: false,
+        svcList: {
+            crlv: { n:'Emissão CRLV Digital', d:'Licenciamento anual', i:'fa-solid fa-file-lines', c:'bg-brand-500/10 text-brand-400', p:0 },
+            full: { n:'Consulta Completa', d:'Débitos + Histórico + Score', i:'fa-solid fa-magnifying-glass-chart', c:'bg-emerald-500/10 text-emerald-400', p:0 },
+            hist: { n:'Histórico Veicular', d:'Leilão + Sinistro + Roubo', i:'fa-solid fa-gavel', c:'bg-amber-500/10 text-amber-400', p:0 },
+            ownr: { n:'Dados Proprietário', d:'Localização + Telefone + CPF', i:'fa-solid fa-user-shield', c:'bg-blue-500/10 text-blue-400', p:0 }
+        },
+        svcN(){ return this.svcList[this.svc]?.n||'' },
+        svcD(){ return this.svcList[this.svc]?.d||'' },
+        svcI(){ return this.svcList[this.svc]?.i||'' },
+        svcC(){ return this.svcList[this.svc]?.c||'' },
+        svcP(){ return this.svcList[this.svc]?.p||0 },
+        fmtP(v){ return (!v||v===0)?'Sob consulta':'R$ '+v.toFixed(2).replace('.',','); },
+        goPlaca(){ if(this.placa){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent('Olá! Consultar placa: '+this.placa.toUpperCase()),'_blank'); } },
+        goCpf(){ if(this.cpf){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent('Olá! Consultar CPF/CNPJ: '+this.cpf),'_blank'); } },
+        goPix(){ const s=this.svcList[this.svc]; window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent('PIX realizado para '+s?.n+'. Chave: 081.843.074-54. Enviarei comprovante.'),'_blank'); },
+        goWa(msg){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent(msg),'_blank'); },
+        copyKey(){ navigator.clipboard.writeText('08184307454'); this.copied=true; setTimeout(()=>this.copied=false,2000); },
+        nav(id){ this.mobileLeft=false; document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+    }">
+
+<!-- ============ MOBILE HEADER ============ -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/50 lg:hidden">
-    <div class="flex items-center justify-between h-16 px-4">
-        <button @click="leftOpen = !leftOpen" class="p-2 text-slate-400 hover:text-white transition-colors">
-            <i class="fa-solid fa-bars text-xl"></i>
-        </button>
+    <div class="flex items-center justify-between h-14 px-4">
+        <button @click="mobileLeft=!mobileLeft" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-bars text-lg"></i></button>
         <div class="flex items-center gap-2">
-            <div class="bg-brand-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-car-burst text-sm"></i></div>
-            <span class="text-lg font-extrabold tracking-tight text-white">Argo<span class="text-brand-500">Car</span></span>
+            <div class="bg-brand-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-car-burst text-xs"></i></div>
+            <span class="text-base font-extrabold text-white">Argo<span class="text-brand-500">Car</span></span>
         </div>
-        <button @click="rightOpen = !rightOpen" class="p-2 text-slate-400 hover:text-white transition-colors">
-            <i class="fa-solid fa-headset text-xl"></i>
-        </button>
+        <button @click="mobileRight=!mobileRight" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-headset text-lg"></i></button>
     </div>
 </header>
 
-<!-- ============================================ -->
-<!-- LAYOUT 3 COLUNAS -->
-<!-- ============================================ -->
+<!-- ============ LAYOUT ============ -->
 <div class="flex min-h-screen">
 
-<!-- ============================================ -->
-<!-- SIDEBAR ESQUERDA (Navegação) -->
-<!-- ============================================ -->
+<!-- ============ SIDEBAR ESQUERDA ============ -->
 <!-- Desktop -->
-<aside class="hidden lg:flex flex-col w-64 xl:w-72 fixed top-0 left-0 h-full bg-slate-950 border-r border-slate-800/50 z-40">
-    <div class="p-6 border-b border-slate-800/50">
-        <div class="flex items-center gap-3">
-            <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-lg shadow-brand-600/20"><i class="fa-solid fa-car-burst text-lg"></i></div>
+<aside class="hidden lg:flex flex-col w-60 fixed top-0 left-0 h-full bg-slate-950 border-r border-slate-800/50 z-40">
+    <!-- Logo -->
+    <div class="p-5 border-b border-slate-800/50">
+        <div class="flex items-center gap-2.5">
+            <div class="bg-brand-600 text-white p-2 rounded-lg"><i class="fa-solid fa-car-burst text-sm"></i></div>
             <div>
-                <span class="text-lg font-extrabold tracking-tight text-white">Argo<span class="text-brand-500">Car</span></span>
-                <p class="text-xs text-slate-500">Consultas Veiculares</p>
+                <span class="text-base font-extrabold text-white">Argo<span class="text-brand-500">Car</span></span>
+                <p class="text-[10px] text-slate-500">Consultas Veiculares</p>
             </div>
         </div>
     </div>
-    <nav class="flex-1 p-4 space-y-1 sidebar-scroll overflow-y-auto">
-        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 pt-2 pb-3">Menu Principal</p>
-        <a @click.prevent="setActive('inicio')" :class="activeSection==='inicio' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#inicio" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-house w-5 text-center"></i> Início
-        </a>
-        <a @click.prevent="setActive('servicos')" :class="activeSection==='servicos' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#servicos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-briefcase w-5 text-center"></i> Serviços
-        </a>
-        <a @click.prevent="setActive('crlv')" :class="activeSection==='crlv' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#crlv" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-file-lines w-5 text-center"></i> CRLV Digital
-        </a>
-        <a @click.prevent="setActive('como-funciona')" :class="activeSection==='como-funciona' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#como-funciona" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-list-check w-5 text-center"></i> Como Funciona
-        </a>
-        <a @click.prevent="setActive('vantagens')" :class="activeSection==='vantagens' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#vantagens" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-shield-halved w-5 text-center"></i> Vantagens
-        </a>
-        <a @click.prevent="setActive('depoimentos')" :class="activeSection==='depoimentos' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#depoimentos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-star w-5 text-center"></i> Depoimentos
-        </a>
-        <a @click.prevent="setActive('faq')" :class="activeSection==='faq' ? 'bg-brand-600/10 text-brand-400 border-brand-500/30' : 'text-slate-400 hover:text-white hover:bg-slate-900 border-transparent'" href="#faq" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all">
-            <i class="fa-solid fa-circle-question w-5 text-center"></i> Dúvidas
-        </a>
+    <!-- Nav -->
+    <nav class="flex-1 p-3 space-y-0.5 sb overflow-y-auto">
+        <p class="text-[10px] font-semibold text-slate-600 uppercase tracking-wider px-3 py-2">Menu</p>
+        <button @click="nav('sec-inicio')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-house w-4 text-center text-xs"></i> Início
+        </button>
+        <button @click="nav('sec-consulta')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-magnifying-glass w-4 text-center text-xs"></i> Consulta
+        </button>
+        <button @click="nav('sec-servicos')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-briefcase w-4 text-center text-xs"></i> Serviços
+        </button>
+        <button @click="nav('sec-crlv')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-file-lines w-4 text-center text-xs"></i> CRLV Digital
+        </button>
+        <button @click="nav('sec-como')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-list-check w-4 text-center text-xs"></i> Como Funciona
+        </button>
+        <button @click="nav('sec-vantagens')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-shield-halved w-4 text-center text-xs"></i> Vantagens
+        </button>
+        <button @click="nav('sec-depoimentos')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-star w-4 text-center text-xs"></i> Depoimentos
+        </button>
+        <button @click="nav('sec-faq')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left">
+            <i class="fa-solid fa-circle-question w-4 text-center text-xs"></i> Dúvidas
+        </button>
     </nav>
-    <div class="p-4 border-t border-slate-800/50">
-        <a :href="'https://wa.me/'+whatsappNumber" target="_blank" class="flex items-center gap-3 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-3 rounded-xl transition-all text-sm shadow-lg shadow-emerald-500/10">
-            <i class="fa-brands fa-whatsapp text-lg"></i>
-            <span>Falar no WhatsApp</span>
-        </a>
+    <!-- WhatsApp -->
+    <div class="p-3 border-t border-slate-800/50">
+        <button @click="goWa('Olá! Gostaria de saber mais sobre a ArgoCar.')" class="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-lg transition-all text-sm">
+            <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp
+        </button>
     </div>
 </aside>
 
-<!-- Mobile sidebar overlay -->
-<div x-show="leftOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="leftOpen=false" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden" x-cloak></div>
-<aside x-show="leftOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed top-0 left-0 w-72 h-full bg-slate-950 border-r border-slate-800 z-50 lg:hidden overflow-y-auto" x-cloak>
-    <div class="p-6 border-b border-slate-800/50 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="bg-brand-600 text-white p-2 rounded-lg"><i class="fa-solid fa-car-burst"></i></div>
-            <span class="text-lg font-extrabold text-white">Argo<span class="text-brand-500">Car</span></span>
+<!-- Mobile overlay + drawer esquerda -->
+<template x-teleport="body">
+    <div x-show="mobileLeft" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="mobileLeft=false" class="fixed inset-0 z-50 bg-black/60 lg:hidden" x-cloak></div>
+</template>
+<template x-teleport="body">
+    <aside x-show="mobileLeft" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed top-0 left-0 w-64 h-full bg-slate-950 border-r border-slate-800 z-50 lg:hidden sb overflow-y-auto" x-cloak>
+        <div class="p-5 border-b border-slate-800/50 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="bg-brand-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-car-burst text-xs"></i></div>
+                <span class="text-base font-extrabold text-white">Argo<span class="text-brand-500">Car</span></span>
+            </div>
+            <button @click="mobileLeft=false" class="p-1.5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <button @click="leftOpen=false" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-    </div>
-    <nav class="p-4 space-y-1">
-        <a @click.prevent="setActive('inicio')" :class="activeSection==='inicio' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#inicio" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-house w-5 text-center"></i> Início</a>
-        <a @click.prevent="setActive('servicos')" :class="activeSection==='servicos' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#servicos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-briefcase w-5 text-center"></i> Serviços</a>
-        <a @click.prevent="setActive('crlv')" :class="activeSection==='crlv' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#crlv" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-file-lines w-5 text-center"></i> CRLV Digital</a>
-        <a @click.prevent="setActive('como-funciona')" :class="activeSection==='como-funciona' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#como-funciona" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-list-check w-5 text-center"></i> Como Funciona</a>
-        <a @click.prevent="setActive('vantagens')" :class="activeSection==='vantagens' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#vantagens" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-shield-halved w-5 text-center"></i> Vantagens</a>
-        <a @click.prevent="setActive('depoimentos')" :class="activeSection==='depoimentos' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#depoimentos" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-star w-5 text-center"></i> Depoimentos</a>
-        <a @click.prevent="setActive('faq')" :class="activeSection==='faq' ? 'bg-brand-600/10 text-brand-400' : 'text-slate-400 hover:text-white hover:bg-slate-900'" href="#faq" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"><i class="fa-solid fa-circle-question w-5 text-center"></i> Dúvidas</a>
-    </nav>
-    <div class="p-4 border-t border-slate-800/50">
-        <a :href="'https://wa.me/'+whatsappNumber" target="_blank" class="flex items-center gap-3 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-3 rounded-xl transition-all text-sm"><i class="fa-brands fa-whatsapp text-lg"></i> Falar no WhatsApp</a>
-    </div>
-</aside>
+        <nav class="p-3 space-y-0.5">
+            <button @click="nav('sec-inicio')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-house w-4 text-center text-xs"></i> Início</button>
+            <button @click="nav('sec-consulta')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-magnifying-glass w-4 text-center text-xs"></i> Consulta</button>
+            <button @click="nav('sec-servicos')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-briefcase w-4 text-center text-xs"></i> Serviços</button>
+            <button @click="nav('sec-crlv')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-file-lines w-4 text-center text-xs"></i> CRLV Digital</button>
+            <button @click="nav('sec-como')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-list-check w-4 text-center text-xs"></i> Como Funciona</button>
+            <button @click="nav('sec-vantagens')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-shield-halved w-4 text-center text-xs"></i> Vantagens</button>
+            <button @click="nav('sec-depoimentos')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-star w-4 text-center text-xs"></i> Depoimentos</button>
+            <button @click="nav('sec-faq')" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-900 transition-all text-left"><i class="fa-solid fa-circle-question w-4 text-center text-xs"></i> Dúvidas</button>
+        </nav>
+        <div class="p-3 border-t border-slate-800/50">
+            <button @click="goWa('Olá! Gostaria de saber mais sobre a ArgoCar.')" class="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-lg transition-all text-sm"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+        </div>
+    </aside>
+</template>
 
-<!-- ============================================ -->
-<!-- CONTEÚDO PRINCIPAL -->
-<!-- ============================================ -->
-<main class="flex-1 lg:ml-64 xl:ml-72 lg:mr-72 xl:mr-80 pt-16 lg:pt-0">
+<!-- ============ CONTEÚDO CENTRAL ============ -->
+<main class="flex-1 lg:ml-60 xl:ml-64 lg:mr-72 xl:mr-80 pt-14 lg:pt-0">
 
-    <!-- Hero -->
-    <section id="inicio" class="px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div class="max-w-3xl">
-            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider mb-6">
-                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                Dados de Todo o Brasil em Tempo Real
+    <!-- ===== INÍCIO ===== -->
+    <section id="sec-inicio" class="px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+        <div class="max-w-2xl">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-[11px] font-semibold uppercase tracking-wider mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span> Dados de Todo o Brasil
             </span>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-                Consulte Histórico de Veículos, <span class="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">Dívidas e Proprietários</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4">
+                Consulte Veículos, <span class="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">Dívidas e Proprietários</span>
             </h1>
-            <p class="text-base lg:text-lg text-slate-400 mb-8 leading-relaxed">
-                Puxe capivara completa de qualquer veículo pela placa ou chassi. Descubra restrições, leilão, sinistros, score de crédito e localize proprietários em minutos.
+            <p class="text-sm sm:text-base text-slate-400 mb-6 leading-relaxed">
+                Histórico completo, débitos, score de crédito e localização de proprietários. Pela placa ou CPF, em minutos.
             </p>
-            <div class="flex flex-wrap gap-3 mb-10">
-                <a href="#servicos" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-brand-600/20 text-sm">
-                    Ver Serviços
-                </a>
-                <button @click="showVideo=true" class="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700 font-semibold px-6 py-3 rounded-xl transition-all flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-play text-brand-500"></i> Ver Demo
-                </button>
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button @click="nav('sec-consulta')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-6 py-2.5 rounded-lg transition-all text-sm">Fazer Consulta</button>
+                <button @click="nav('sec-servicos')" class="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-semibold px-6 py-2.5 rounded-lg transition-all text-sm">Ver Serviços</button>
+                <button @click="showVid=true" class="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-semibold px-6 py-2.5 rounded-lg transition-all text-sm flex items-center gap-2"><i class="fa-solid fa-play text-brand-500 text-xs"></i> Demo</button>
             </div>
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-900 max-w-lg">
-                <div>
-                    <div class="text-2xl font-bold text-white">100%</div>
-                    <div class="text-xs text-slate-500 uppercase mt-1">Online e Seguro</div>
+            <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-900 max-w-sm">
+                <div><div class="text-xl font-bold text-white">100%</div><div class="text-[10px] text-slate-500 uppercase">Online</div></div>
+                <div><div class="text-xl font-bold text-white">Min</div><div class="text-[10px] text-slate-500 uppercase">Entrega</div></div>
+                <div><div class="text-xl font-bold text-white">27+DF</div><div class="text-[10px] text-slate-500 uppercase">Estados</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONSULTA RÁPIDA ===== -->
+    <section id="sec-consulta" class="px-4 sm:px-6 lg:px-8 py-10 bg-slate-900/30 border-y border-slate-800/50">
+        <div class="max-w-2xl">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-brand-500"></i> Consulta Rápida</h2>
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-5" x-data="{tab:'placa'}">
+                <div class="flex bg-slate-950 p-1 rounded-lg mb-4 border border-slate-800">
+                    <button @click="tab='placa'" :class="tab==='placa'?'bg-brand-600 text-white':'text-slate-400'" class="flex-1 py-2 text-xs font-semibold rounded-md transition-all">Placa</button>
+                    <button @click="tab='cpf'" :class="tab==='cpf'?'bg-brand-600 text-white':'text-slate-400'" class="flex-1 py-2 text-xs font-semibold rounded-md transition-all">CPF/CNPJ</button>
                 </div>
-                <div>
-                    <div class="text-2xl font-bold text-white">Minutos</div>
-                    <div class="text-xs text-slate-500 uppercase mt-1">Tempo de Entrega</div>
+                <div x-show="tab==='placa'" class="space-y-3">
+                    <input type="text" x-model="placa" placeholder="ABC1D23" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-lg py-3 px-4 text-white placeholder-slate-600 font-mono text-base tracking-widest uppercase transition-all">
+                    <button @click="goPlaca()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp"></i> Consultar Placa</button>
                 </div>
-                <div>
-                    <div class="text-2xl font-bold text-white">27+DF</div>
-                    <div class="text-xs text-slate-500 uppercase mt-1">Estados Atendidos</div>
+                <div x-show="tab==='cpf'" class="space-y-3" x-cloak>
+                    <input type="text" x-model="cpf" placeholder="000.000.000-00" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-lg py-3 px-4 text-white placeholder-slate-600 font-mono text-base transition-all">
+                    <button @click="goCpf()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp"></i> Consultar CPF</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Consulta Rápida (inline no conteúdo) -->
-    <section id="consultar" class="px-4 sm:px-6 lg:px-8 py-10 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-3xl">
-            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-brand-500"></i> Consulta Rápida</h2>
-            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5" x-data="{ tab:'placa' }">
-                <div class="flex bg-slate-950 p-1 rounded-xl mb-5 border border-slate-800">
-                    <button @click="tab='placa'" :class="tab==='placa'?'bg-brand-600 text-white':'text-slate-400 hover:text-white'" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all"><i class="fa-solid fa-car mr-2"></i>Pela Placa</button>
-                    <button @click="tab='cpf'" :class="tab==='cpf'?'bg-brand-600 text-white':'text-slate-400 hover:text-white'" class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all"><i class="fa-solid fa-address-card mr-2"></i>Por CPF</button>
+    <!-- ===== SERVIÇOS ===== -->
+    <section id="sec-servicos" class="px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div class="max-w-2xl">
+            <h2 class="text-xl font-bold text-white mb-1">Serviços</h2>
+            <p class="text-slate-400 text-xs mb-6">Relatórios completos para segurança total.</p>
+            <div class="grid sm:grid-cols-2 gap-3">
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4 hover:border-brand-500/40 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-3"><i class="fa-solid fa-file-invoice-dollar text-sm"></i></div>
+                    <h3 class="font-bold text-white text-sm mb-1">Débitos e Multas</h3>
+                    <p class="text-[11px] text-slate-400">IPVA, licenciamento, multas, DPVAT.</p>
                 </div>
-                <div x-show="tab==='placa'" class="space-y-4">
-                    <input type="text" x-model="placa" placeholder="ABC1D23 ou ABC-1234" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3.5 px-4 text-white placeholder-slate-600 font-mono text-lg tracking-widest uppercase transition-all">
-                    <button @click="sendPlacaQuery()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp text-lg"></i> Consultar Placa</button>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4 hover:border-brand-500/40 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-3"><i class="fa-solid fa-gavel text-sm"></i></div>
+                    <h3 class="font-bold text-white text-sm mb-1">Histórico Completo</h3>
+                    <p class="text-[11px] text-slate-400">Leilão, sinistros, roubo, restrições.</p>
                 </div>
-                <div x-show="tab==='cpf'" class="space-y-4" x-cloak>
-                    <input type="text" x-model="cpf" placeholder="000.000.000-00" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 rounded-xl py-3.5 px-4 text-white placeholder-slate-600 font-mono text-lg transition-all">
-                    <button @click="sendCpfQuery()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp text-lg"></i> Consultar CPF</button>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4 hover:border-brand-500/40 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-3"><i class="fa-solid fa-user-shield text-sm"></i></div>
+                    <h3 class="font-bold text-white text-sm mb-1">Dados Proprietários</h3>
+                    <p class="text-[11px] text-slate-400">Localização, telefone, CPF/CNPJ.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Serviços -->
-    <section id="servicos" class="px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div class="max-w-3xl">
-            <h2 class="text-2xl font-bold text-white mb-2">Nossos Serviços</h2>
-            <p class="text-slate-400 text-sm mb-8">Relatórios completos para garantir segurança na compra, venda ou cobrança.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5 hover:border-brand-500/50 transition-all group">
-                    <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                    <h3 class="font-bold text-white mb-2">Débitos e Multas</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">IPVA, licenciamento, multas estaduais/federais, DPVAT e restrições financeiras.</p>
-                </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5 hover:border-brand-500/50 transition-all group">
-                    <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-gavel"></i></div>
-                    <h3 class="font-bold text-white mb-2">Histórico Completo</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Leilão, sinistros, roubo/furto, restrições judiciais e administrativas.</p>
-                </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5 hover:border-brand-500/50 transition-all group">
-                    <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-user-shield"></i></div>
-                    <h3 class="font-bold text-white mb-2">Dados de Proprietários</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Localização, telefones, endereço e confirmação de CPF/CNPJ.</p>
-                </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5 hover:border-brand-500/50 transition-all group">
-                    <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-4 group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-chart-line"></i></div>
-                    <h3 class="font-bold text-white mb-2">Score e Crédito</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Score de crédito, restrições financeiras e análise de aprovação.</p>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4 hover:border-brand-500/40 transition-all">
+                    <div class="w-9 h-9 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mb-3"><i class="fa-solid fa-chart-line text-sm"></i></div>
+                    <h3 class="font-bold text-white text-sm mb-1">Score e Crédito</h3>
+                    <p class="text-[11px] text-slate-400">Score, restrições, análise de crédito.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CRLV -->
-    <section id="crlv" class="px-4 sm:px-6 lg:px-8 py-12 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-3xl">
-            <div class="bg-gradient-to-r from-brand-600/20 to-emerald-500/10 border border-brand-500/30 rounded-2xl p-6">
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-file-lines text-lg"></i></div>
-                    <div>
-                        <h3 class="text-lg font-bold text-white">Emissão de CRLV Digital</h3>
-                        <p class="text-slate-400 text-xs mt-0.5">Licenciamento anual - Valores sob consulta via WhatsApp.</p>
-                    </div>
+    <!-- ===== CRLV ===== -->
+    <section id="sec-crlv" class="px-4 sm:px-6 lg:px-8 py-10 bg-slate-900/30 border-y border-slate-800/50">
+        <div class="max-w-2xl">
+            <div class="bg-gradient-to-r from-brand-600/20 to-emerald-500/10 border border-brand-500/30 rounded-xl p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-brand-600 text-white flex items-center justify-center"><i class="fa-solid fa-file-lines text-sm"></i></div>
+                    <div><h3 class="text-base font-bold text-white">CRLV Digital</h3><p class="text-[11px] text-slate-400">Licenciamento 27 estados + DF</p></div>
                 </div>
-                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5 text-xs">
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Acre - AC</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Alagoas - AL</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Amapá - AP</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Amazonas - AM</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Bahia - BA</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Ceará - CE</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Distrito Federal - DF</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Espírito Santo - ES</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Goiás - GO</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Maranhão - MA</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Mato Grosso - MT</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Mato Grosso do Sul - MS</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Minas Gerais - MG</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Pará - PA</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Paraíba - PB</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Paraná - PR</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Pernambuco - PE</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Piauí - PI</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Rio de Janeiro - RJ</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Rio Grande do Norte - RN</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Rio Grande do Sul - RS</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Rondônia - RO</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Roraima - RR</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Santa Catarina - SC</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>São Paulo - SP</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Sergipe - SE</span>
-                    <span class="flex items-center gap-1.5 text-slate-300"><i class="fa-solid fa-check text-emerald-500 text-[10px]"></i>Tocantins - TO</span>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1 text-[11px]">
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Acre</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Alagoas</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Amapá</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Amazonas</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Bahia</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Ceará</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>DF</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Esp. Santo</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Goiás</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Maranhão</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Mato Grosso</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>M. G. do Sul</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Minas</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Pará</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Paraíba</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Paraná</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Pernambuco</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Piauí</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Rio de Janeiro</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Rio G. do Norte</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Rio G. do Sul</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Rondônia</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Roraima</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Santa Catarina</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>São Paulo</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Sergipe</span>
+                    <span class="text-slate-300 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-500 text-[8px]"></i>Tocantins</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Como Funciona -->
-    <section id="como-funciona" class="px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div class="max-w-3xl">
-            <h2 class="text-2xl font-bold text-white mb-2">Como Funciona</h2>
-            <p class="text-slate-400 text-sm mb-8">Sem burocracia. Solicite online e receba no celular.</p>
-            <div class="grid sm:grid-cols-3 gap-6">
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-5 text-center">
-                    <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-bold mx-auto mb-4 shadow-lg shadow-brand-600/20">1</div>
-                    <h3 class="font-bold text-white text-sm mb-2">Envie os Dados</h3>
-                    <p class="text-xs text-slate-400">Informe a placa, chassi ou CPF/CNPJ.</p>
-                </div>
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-5 text-center">
-                    <div class="w-12 h-12 rounded-full bg-brand-600 text-white flex items-center justify-center text-lg font-bold mx-auto mb-4 shadow-lg shadow-brand-600/20">2</div>
-                    <h3 class="font-bold text-white text-sm mb-2">Escolha a Consulta</h3>
-                    <p class="text-xs text-slate-400">Selecione o serviço ideal.</p>
-                </div>
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-5 text-center">
-                    <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-lg font-bold mx-auto mb-4 shadow-lg shadow-emerald-500/20">3</div>
-                    <h3 class="font-bold text-white text-sm mb-2">Receba o Relatório</h3>
-                    <p class="text-xs text-slate-400">PDF no WhatsApp em minutos.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vantagens -->
-    <section id="vantagens" class="px-4 sm:px-6 lg:px-8 py-12 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-3xl">
-            <h2 class="text-2xl font-bold text-white mb-2">Vantagens</h2>
-            <p class="text-slate-400 text-sm mb-8">Por que escolher a ArgoCar?</p>
+    <!-- ===== COMO FUNCIONA ===== -->
+    <section id="sec-como" class="px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div class="max-w-2xl">
+            <h2 class="text-xl font-bold text-white mb-1">Como Funciona</h2>
+            <p class="text-slate-400 text-xs mb-6">Simples e rápido.</p>
             <div class="grid sm:grid-cols-3 gap-4">
-                <div class="flex items-start gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50">
-                    <div class="bg-brand-500/10 text-brand-400 p-2 rounded-lg mt-0.5"><i class="fa-solid fa-globe text-sm"></i></div>
-                    <div><h4 class="font-bold text-white text-sm">Nacional</h4><p class="text-xs text-slate-400">Todos os estados + DF</p></div>
+                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 text-center">
+                    <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold mx-auto mb-3">1</div>
+                    <h3 class="font-bold text-white text-xs mb-1">Envie os Dados</h3>
+                    <p class="text-[11px] text-slate-400">Placa, chassi ou CPF/CNPJ.</p>
                 </div>
-                <div class="flex items-start gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50">
-                    <div class="bg-brand-500/10 text-brand-400 p-2 rounded-lg mt-0.5"><i class="fa-solid fa-lock text-sm"></i></div>
-                    <div><h4 class="font-bold text-white text-sm">Sigilo</h4><p class="text-xs text-slate-400">100% confidencial</p></div>
+                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 text-center">
+                    <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold mx-auto mb-3">2</div>
+                    <h3 class="font-bold text-white text-xs mb-1">Escolha o Serviço</h3>
+                    <p class="text-[11px] text-slate-400">Selecione e pague via PIX.</p>
                 </div>
-                <div class="flex items-start gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50">
-                    <div class="bg-brand-500/10 text-brand-400 p-2 rounded-lg mt-0.5"><i class="fa-solid fa-bolt text-sm"></i></div>
-                    <div><h4 class="font-bold text-white text-sm">Agilidade</h4><p class="text-xs text-slate-400">5-15 min entrega</p></div>
+                <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 text-center">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-sm font-bold mx-auto mb-3">3</div>
+                    <h3 class="font-bold text-white text-xs mb-1">Receba o Relatório</h3>
+                    <p class="text-[11px] text-slate-400">PDF no WhatsApp em minutos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VANTAGENS ===== -->
+    <section id="sec-vantagens" class="px-4 sm:px-6 lg:px-8 py-10 bg-slate-900/30 border-y border-slate-800/50">
+        <div class="max-w-2xl">
+            <h2 class="text-xl font-bold text-white mb-1">Vantagens</h2>
+            <p class="text-slate-400 text-xs mb-6">Por que a ArgoCar?</p>
+            <div class="grid sm:grid-cols-3 gap-3 mb-6">
+                <div class="flex items-start gap-2.5 p-3 bg-slate-900/50 rounded-lg border border-slate-800/50">
+                    <div class="bg-brand-500/10 text-brand-400 p-1.5 rounded-md mt-0.5"><i class="fa-solid fa-globe text-xs"></i></div>
+                    <div><h4 class="font-bold text-white text-xs">Nacional</h4><p class="text-[10px] text-slate-400">Todos estados + DF</p></div>
+                </div>
+                <div class="flex items-start gap-2.5 p-3 bg-slate-900/50 rounded-lg border border-slate-800/50">
+                    <div class="bg-brand-500/10 text-brand-400 p-1.5 rounded-md mt-0.5"><i class="fa-solid fa-lock text-xs"></i></div>
+                    <div><h4 class="font-bold text-white text-xs">Sigilo</h4><p class="text-[10px] text-slate-400">100% confidencial</p></div>
+                </div>
+                <div class="flex items-start gap-2.5 p-3 bg-slate-900/50 rounded-lg border border-slate-800/50">
+                    <div class="bg-brand-500/10 text-brand-400 p-1.5 rounded-md mt-0.5"><i class="fa-solid fa-bolt text-xs"></i></div>
+                    <div><h4 class="font-bold text-white text-xs">Rápido</h4><p class="text-[10px] text-slate-400">5-15 min entrega</p></div>
                 </div>
             </div>
             <!-- Exemplo Relatório -->
-            <div class="mt-8 bg-slate-900 border border-slate-800 rounded-xl p-5">
-                <h3 class="text-sm font-bold text-white mb-4">Exemplo de Relatório</h3>
-                <div class="space-y-2 font-mono text-xs text-slate-400">
-                    <div class="border-b border-slate-800 pb-2"><span class="text-brand-400">VEÍCULO:</span> TOYOTA COROLLA XEI 2.0</div>
-                    <div class="border-b border-slate-800 pb-2"><span class="text-brand-400">PLACA:</span> QXX-XXXX | <span class="text-brand-400">ANO:</span> 2021/2022</div>
-                    <div class="border-b border-slate-800 pb-2"><span class="text-brand-400">ROUBO:</span> <span class="text-emerald-400 font-bold">SEM RESTRIÇÃO</span></div>
-                    <div class="border-b border-slate-800 pb-2"><span class="text-brand-400">LEILÃO:</span> <span class="text-red-400 font-bold">PASSAGEM POR LEILÃO</span></div>
-                    <div class="pb-2"><span class="text-brand-400">DÉBITOS:</span> IPVA 2026 (R$ 3.450,00)</div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <h3 class="text-xs font-bold text-white mb-3">Exemplo de Relatório</h3>
+                <div class="space-y-1.5 font-mono text-[11px] text-slate-400">
+                    <div class="border-b border-slate-800 pb-1.5"><span class="text-brand-400">VEÍCULO:</span> TOYOTA COROLLA XEI 2.0</div>
+                    <div class="border-b border-slate-800 pb-1.5"><span class="text-brand-400">PLACA:</span> QXX-XXXX | <span class="text-brand-400">ANO:</span> 2021/2022</div>
+                    <div class="border-b border-slate-800 pb-1.5"><span class="text-brand-400">ROUBO:</span> <span class="text-emerald-400 font-bold">SEM RESTRIÇÃO</span></div>
+                    <div class="border-b border-slate-800 pb-1.5"><span class="text-brand-400">LEILÃO:</span> <span class="text-red-400 font-bold">PASSAGEM POR LEILÃO</span></div>
+                    <div><span class="text-brand-400">DÉBITOS:</span> IPVA 2026 (R$ 3.450,00)</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Depoimentos -->
-    <section id="depoimentos" class="px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div class="max-w-3xl">
-            <h2 class="text-2xl font-bold text-white mb-2">Depoimentos</h2>
-            <p class="text-slate-400 text-sm mb-8">Quem usa, recomenda.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5">
-                    <div class="flex gap-0.5 mb-3"><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i></div>
-                    <p class="text-slate-300 text-xs leading-relaxed mb-4">"Agilizei 3 transferências na mesma semana. O CRLV saiu em 10 minutos e o relatório evitou que eu comprasse um carro de leilão."</p>
+    <!-- ===== DEPOIMENTOS ===== -->
+    <section id="sec-depoimentos" class="px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div class="max-w-2xl">
+            <h2 class="text-xl font-bold text-white mb-1">Depoimentos</h2>
+            <p class="text-slate-400 text-xs mb-6">Quem usa, recomenda.</p>
+            <div class="grid sm:grid-cols-2 gap-3">
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4">
+                    <div class="flex gap-0.5 mb-2"><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i></div>
+                    <p class="text-slate-300 text-[11px] leading-relaxed mb-3">"Agilizei 3 transferências na semana. CRLV saiu em 10 minutos. Indico pra todos."</p>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold">MS</div>
-                        <div><p class="font-semibold text-white text-xs">M. Santos</p><p class="text-[10px] text-slate-500">Despachante - SP</p></div>
+                        <div class="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center text-white text-[10px] font-bold">MS</div>
+                        <div><p class="font-semibold text-white text-[11px]">M. Santos</p><p class="text-[9px] text-slate-500">Despachante - SP</p></div>
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5">
-                    <div class="flex gap-0.5 mb-3"><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i></div>
-                    <p class="text-slate-300 text-xs leading-relaxed mb-4">"Uso para checar score de clientes antes de financiar. O relatório me dá o telefone direto pra negociar."</p>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4">
+                    <div class="flex gap-0.5 mb-2"><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i></div>
+                    <p class="text-slate-300 text-[11px] leading-relaxed mb-3">"Checo score antes de financiar. O relatório me dá telefone direto pra negociar."</p>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white text-xs font-bold">RC</div>
-                        <div><p class="font-semibold text-white text-xs">R. Costa</p><p class="text-[10px] text-slate-500">Financeira - MG</p></div>
+                        <div class="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center text-white text-[10px] font-bold">RC</div>
+                        <div><p class="font-semibold text-white text-[11px]">R. Costa</p><p class="text-[9px] text-slate-500">Financeira - MG</p></div>
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5">
-                    <div class="flex gap-0.5 mb-3"><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i><i class="fa-solid fa-star text-amber-400 text-xs"></i></div>
-                    <p class="text-slate-300 text-xs leading-relaxed mb-4">"Precisava do CRLV do Paraná urgente. Resolveram no mesmo dia. Atendimento humano, não robô."</p>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4">
+                    <div class="flex gap-0.5 mb-2"><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i><i class="fa-solid fa-star text-amber-400 text-[10px]"></i></div>
+                    <p class="text-slate-300 text-[11px] leading-relaxed mb-3">"CRLV do Paraná no mesmo dia. Atendimento humano, não robô."</p>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white text-xs font-bold">JL</div>
-                        <div><p class="font-semibold text-white text-xs">J. Lima</p><p class="text-[10px] text-slate-500">Loja de Veículos - PR</p></div>
+                        <div class="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center text-white text-[10px] font-bold">JL</div>
+                        <div><p class="font-semibold text-white text-[11px]">J. Lima</p><p class="text-[9px] text-slate-500">Loja de Veículos - PR</p></div>
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-5 flex flex-col items-center justify-center text-center">
-                    <div class="text-3xl font-extrabold text-brand-400 mb-1">2.847+</div>
-                    <p class="text-xs text-slate-400">consultas realizadas este mês</p>
+                <div class="bg-slate-900 border border-slate-800/60 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+                    <div class="text-2xl font-extrabold text-brand-400 mb-1">2.847+</div>
+                    <p class="text-[11px] text-slate-400">consultas este mês</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="px-4 sm:px-6 lg:px-8 py-12 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-3xl" x-data="{ active:null }">
-            <h2 class="text-2xl font-bold text-white mb-2">Dúvidas Frequentes</h2>
-            <p class="text-slate-400 text-sm mb-8">Respostas rápidas.</p>
-            <div class="space-y-3">
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                    <button @click="active=active===1?null:1" class="w-full px-5 py-4 text-left font-bold text-white text-sm flex justify-between items-center hover:bg-slate-800/50 transition-all">
-                        <span>Quais dados preciso fornecer?</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-xs" :class="active===1?'rotate-180':''"></i>
-                    </button>
-                    <div x-show="active===1" x-collapse class="px-5 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3" x-cloak>Placa ou chassi para veículos. CPF/CNPJ para score e dados de proprietário.</div>
+    <!-- ===== FAQ ===== -->
+    <section id="sec-faq" class="px-4 sm:px-6 lg:px-8 py-10 bg-slate-900/30 border-y border-slate-800/50">
+        <div class="max-w-2xl" x-data="{a:null}">
+            <h2 class="text-xl font-bold text-white mb-1">Dúvidas</h2>
+            <p class="text-slate-400 text-xs mb-6">Respostas rápidas.</p>
+            <div class="space-y-2">
+                <div class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+                    <button @click="a=a===1?null:1" class="w-full px-4 py-3 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Preciso fornecer?</span><i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="a===1?'rotate-180':''"></i></button>
+                    <div x-show="a===1" x-collapse class="px-4 pb-3 text-[11px] text-slate-400 border-t border-slate-800/50 pt-2" x-cloak>Placa ou chassi para veículos. CPF/CNPJ para score e proprietário.</div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                    <button @click="active=active===2?null:2" class="w-full px-5 py-4 text-left font-bold text-white text-sm flex justify-between items-center hover:bg-slate-800/50 transition-all">
-                        <span>Quanto tempo demora?</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-xs" :class="active===2?'rotate-180':''"></i>
-                    </button>
-                    <div x-show="active===2" x-collapse class="px-5 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3" x-cloak>5 a 15 minutos após confirmação do pagamento.</div>
+                <div class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+                    <button @click="a=a===2?null:2" class="w-full px-4 py-3 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Tempo de entrega?</span><i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="a===2?'rotate-180':''"></i></button>
+                    <div x-show="a===2" x-collapse class="px-4 pb-3 text-[11px] text-slate-400 border-t border-slate-800/50 pt-2" x-cloak>5 a 15 minutos após pagamento.</div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                    <button @click="active=active===3?null:3" class="w-full px-5 py-4 text-left font-bold text-white text-sm flex justify-between items-center hover:bg-slate-800/50 transition-all">
-                        <span>Como é o pagamento?</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-xs" :class="active===3?'rotate-180':''"></i>
-                    </button>
-                    <div x-show="active===3" x-collapse class="px-5 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3" x-cloak>PIX com liberação imediata. Envie o comprovante e ligamos para confirmar.</div>
+                <div class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+                    <button @click="a=a===3?null:3" class="w-full px-4 py-3 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Forma de pagamento?</span><i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="a===3?'rotate-180':''"></i></button>
+                    <div x-show="a===3" x-collapse class="px-4 pb-3 text-[11px] text-slate-400 border-t border-slate-800/50 pt-2" x-cloak>PIX. Envie comprovante e ligamos para confirmar.</div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                    <button @click="active=active===4?null:4" class="w-full px-5 py-4 text-left font-bold text-white text-sm flex justify-between items-center hover:bg-slate-800/50 transition-all">
-                        <span>As consultas são atualizadas?</span>
-                        <i class="fa-solid fa-chevron-down transition-transform duration-300 text-xs" :class="active===4?'rotate-180':''"></i>
-                    </button>
-                    <div x-show="active===4" x-collapse class="px-5 pb-4 text-xs text-slate-400 leading-relaxed border-t border-slate-800/50 pt-3" x-cloak>Sim, dados 100% atualizados das bases oficiais SENATRAN/Detrans.</div>
+                <div class="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+                    <button @click="a=a===4?null:4" class="w-full px-4 py-3 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Dados atualizados?</span><i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="a===4?'rotate-180':''"></i></button>
+                    <div x-show="a===4" x-collapse class="px-4 pb-3 text-[11px] text-slate-400 border-t border-slate-800/50 pt-2" x-cloak>Sim, 100% atualizados das bases SENATRAN/Detrans.</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Trust Badges -->
+    <!-- ===== BADGES ===== -->
+    <section class="px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-2xl grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-1.5"><i class="fa-solid fa-shield-halved text-xs"></i></div><span class="text-[10px] font-semibold text-white">LGPD</span></div>
+            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mx-auto mb-1.5"><i class="fa-solid fa-lock text-xs"></i></div><span class="text-[10px] font-semibold text-white">ICP-Brasil</span></div>
+            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto mb-1.5"><i class="fa-solid fa-database text-xs"></i></div><span class="text-[10px] font-semibold text-white">SENATRAN</span></div>
+            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto mb-1.5"><i class="fa-solid fa-clock text-xs"></i></div><span class="text-[10px] font-semibold text-white">5-15 min</span></div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
     <section class="px-4 sm:px-6 lg:px-8 py-10">
-        <div class="max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/50">
-                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-shield-halved"></i></div>
-                <span class="text-xs font-semibold text-white">LGPD</span>
-            </div>
-            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/50">
-                <div class="w-10 h-10 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-lock"></i></div>
-                <span class="text-xs font-semibold text-white">ICP-Brasil</span>
-            </div>
-            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/50">
-                <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-database"></i></div>
-                <span class="text-xs font-semibold text-white">SENATRAN</span>
-            </div>
-            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800/50">
-                <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-clock"></i></div>
-                <span class="text-xs font-semibold text-white">5-15 min</span>
-            </div>
+        <div class="max-w-2xl bg-gradient-to-br from-slate-900 to-brand-950 border border-brand-500/20 rounded-xl p-6 text-center">
+            <h2 class="text-xl font-extrabold text-white mb-2">Evite Golpes na Compra</h2>
+            <p class="text-slate-300 text-xs mb-5">Consulte antes de fechar negócio.</p>
+            <button @click="goWa('Olá! Preciso consultar um veículo.')" class="inline-flex items-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-8 py-3 rounded-lg transition-all shadow-xl shadow-emerald-500/20 text-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Chamar no WhatsApp
+            </button>
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="px-4 sm:px-6 lg:px-8 py-12">
-        <div class="max-w-3xl bg-gradient-to-br from-slate-900 to-brand-950 border border-brand-500/20 rounded-2xl p-8 text-center">
-            <h2 class="text-2xl font-extrabold text-white mb-3">Evite Golpes na Compra</h2>
-            <p class="text-slate-300 text-sm mb-6">Consulte antes de fechar negócio. Receba em minutos.</p>
-            <a :href="'https://wa.me/'+whatsappNumber" target="_blank" class="inline-flex items-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-8 py-4 rounded-xl transition-all shadow-xl shadow-emerald-500/20">
-                <i class="fa-brands fa-whatsapp text-xl"></i> Chamar no WhatsApp
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="px-4 sm:px-6 lg:px-8 py-8 border-t border-slate-900">
-        <div class="max-w-3xl flex flex-col sm:flex-row items-center justify-between gap-4">
+    <!-- ===== FOOTER ===== -->
+    <footer class="px-4 sm:px-6 lg:px-8 py-6 border-t border-slate-900">
+        <div class="max-w-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-                <div class="bg-brand-600 text-white p-1.5 rounded-lg"><i class="fa-solid fa-car-burst text-sm"></i></div>
-                <span class="font-extrabold text-white">Argo<span class="text-brand-500">Car</span></span>
+                <div class="bg-brand-600 text-white p-1 rounded-lg"><i class="fa-solid fa-car-burst text-[10px]"></i></div>
+                <span class="font-extrabold text-white text-sm">Argo<span class="text-brand-500">Car</span></span>
             </div>
-            <p class="text-xs text-slate-500">&copy; 2026 ArgoCar. Todos os direitos reservados. LGPD.</p>
+            <p class="text-[10px] text-slate-500">&copy; 2026 ArgoCar. LGPD.</p>
         </div>
     </footer>
 
 </main>
 
-<!-- ============================================ -->
-<!-- SIDEBAR DIREITA (Ações Rápidas + PIX) -->
-<!-- ============================================ -->
+<!-- ============ SIDEBAR DIREITA ============ -->
 <!-- Desktop -->
-<aside class="hidden lg:flex flex-col w-72 xl:w-80 fixed top-0 right-0 h-full bg-slate-950 border-l border-slate-800/50 z-40 sidebar-scroll overflow-y-auto">
-    <div class="p-5 border-b border-slate-800/50">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-headset text-brand-500"></i> Área do Cliente</h3>
+<aside class="hidden lg:flex flex-col w-72 xl:w-80 fixed top-0 right-0 h-full bg-slate-950 border-l border-slate-800/50 z-40 sb overflow-y-auto">
+    <div class="p-4 border-b border-slate-800/50">
+        <h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid fa-headset text-brand-500"></i> Área do Cliente</h3>
     </div>
-    <div class="p-5 space-y-5">
-        <!-- Contato rápido -->
-        <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Contato</p>
-            <a :href="'https://wa.me/'+whatsappNumber" target="_blank" class="flex items-center gap-3 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-3 rounded-xl transition-all text-sm w-full justify-center">
-                <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp
-            </a>
-            <p class="text-center text-xs text-slate-500 mt-2">(84) 92183-8594</p>
-        </div>
+    <div class="p-4 space-y-4">
+        <!-- WhatsApp -->
+        <button @click="goWa('Olá! Gostaria de saber mais sobre a ArgoCar.')" class="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-lg transition-all text-sm">
+            <i class="fa-brands fa-whatsapp text-base"></i> (84) 92183-8594
+        </button>
 
         <!-- Seletor de Serviço -->
-        <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Contratar Serviço</p>
-            <div x-show="!selectedService" class="space-y-2">
-                <button @click="selectService('crlv')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
-                    <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-file-lines text-xs"></i></div>
-                    <div><p class="text-xs font-semibold text-white">CRLV Digital</p><p class="text-[10px] text-slate-500">Licenciamento</p></div>
+        <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
+            <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Contratar</p>
+            <div x-show="!svc" class="space-y-1.5">
+                <button @click="svc='crlv'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
+                    <div class="w-7 h-7 rounded-md bg-brand-500/10 text-brand-400 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition-all"><i class="fa-solid fa-file-lines text-[10px]"></i></div>
+                    <div><p class="text-[11px] font-semibold text-white">CRLV Digital</p><p class="text-[9px] text-slate-500">Licenciamento</p></div>
                 </button>
-                <button @click="selectService('completa')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fa-solid fa-magnifying-glass-chart text-xs"></i></div>
-                    <div><p class="text-xs font-semibold text-white">Consulta Completa</p><p class="text-[10px] text-slate-500">Débitos + Histórico</p></div>
+                <button @click="svc='full'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
+                    <div class="w-7 h-7 rounded-md bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fa-solid fa-magnifying-glass-chart text-[10px]"></i></div>
+                    <div><p class="text-[11px] font-semibold text-white">Consulta Completa</p><p class="text-[9px] text-slate-500">Débitos + Histórico</p></div>
                 </button>
-                <button @click="selectService('historico')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-all"><i class="fa-solid fa-gavel text-xs"></i></div>
-                    <div><p class="text-xs font-semibold text-white">Histórico</p><p class="text-[10px] text-slate-500">Leilão + Sinistro</p></div>
+                <button @click="svc='hist'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
+                    <div class="w-7 h-7 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-all"><i class="fa-solid fa-gavel text-[10px]"></i></div>
+                    <div><p class="text-[11px] font-semibold text-white">Histórico</p><p class="text-[9px] text-slate-500">Leilão + Sinistro</p></div>
                 </button>
-                <button @click="selectService('proprietario')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-user-shield text-xs"></i></div>
-                    <div><p class="text-xs font-semibold text-white">Proprietário</p><p class="text-[10px] text-slate-500">Localização + Dados</p></div>
+                <button @click="svc='ownr'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left group">
+                    <div class="w-7 h-7 rounded-md bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-user-shield text-[10px]"></i></div>
+                    <div><p class="text-[11px] font-semibold text-white">Proprietário</p><p class="text-[9px] text-slate-500">Localização + Dados</p></div>
                 </button>
             </div>
 
             <!-- PIX Panel -->
-            <div x-show="selectedService" x-transition class="space-y-4" x-cloak>
-                <div class="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800">
+            <div x-show="svc" x-transition class="space-y-3" x-cloak>
+                <div class="flex items-center justify-between p-2 bg-slate-950 rounded-lg border border-slate-800">
                     <div class="flex items-center gap-2">
-                        <div :class="serviceIconBg" class="w-8 h-8 rounded-lg flex items-center justify-center"><i :class="serviceIcon" class="text-xs"></i></div>
-                        <div><p class="text-xs font-semibold text-white" x-text="serviceName"></p><p class="text-[10px] text-slate-500" x-text="serviceDesc"></p></div>
+                        <div :class="svcC()" class="w-6 h-6 rounded-md flex items-center justify-center"><i :class="svcI()" class="text-[10px]"></i></div>
+                        <span class="text-[11px] font-semibold text-white" x-text="svcN()"></span>
                     </div>
-                    <button @click="selectedService=null" class="text-slate-500 hover:text-white text-[10px]">✕</button>
+                    <button @click="svc=null" class="text-slate-500 hover:text-white text-[10px]">✕</button>
                 </div>
-
-                <!-- PIX -->
-                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center"><i class="fa-brands fa-pix text-sm text-slate-950"></i></div>
-                        <div><p class="font-bold text-emerald-400 text-xs">Pagamento PIX</p><p class="text-[10px] text-slate-500">Chave CPF</p></div>
-                    </div>
-                    <div class="space-y-2 text-xs">
+                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                    <p class="text-[10px] font-bold text-emerald-400 mb-2">Pagamento PIX</p>
+                    <div class="space-y-1.5 text-[11px]">
                         <div class="flex justify-between"><span class="text-slate-400">Titular:</span><span class="text-white font-mono text-[10px]">ANDERSON J. C. GALVAO</span></div>
                         <div class="flex justify-between"><span class="text-slate-400">CPF:</span><span class="text-white font-mono">081.843.074-54</span></div>
-                        <div class="flex justify-between"><span class="text-slate-400">Valor:</span><span class="font-bold text-emerald-400" x-text="formatPrice(servicePrice)"></span></div>
+                        <div class="flex justify-between"><span class="text-slate-400">Valor:</span><span class="font-bold text-emerald-400" x-text="fmtP(svcP())"></span></div>
                     </div>
-                    <button @click="copyPixKey()" class="w-full mt-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-semibold py-2.5 rounded-lg transition-all text-xs flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-copy"></i> <span x-text="copied?'Copiado!':'Copiar Chave'"></span>
-                    </button>
+                    <button @click="copyKey()" class="w-full mt-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-semibold py-2 rounded-lg transition-all text-[11px] flex items-center justify-center gap-1.5"><i class="fa-solid fa-copy"></i> <span x-text="copied?'Copiado!':'Copiar Chave'"></span></button>
                 </div>
-
                 <!-- Passos -->
                 <div class="bg-slate-950 border border-slate-800 rounded-lg p-3">
-                    <p class="text-xs font-semibold text-white mb-2"><i class="fa-solid fa-circle-info text-brand-400 mr-1"></i> Próximos Passos</p>
-                    <ol class="space-y-2 text-[11px] text-slate-300">
-                        <li class="flex items-start gap-2"><span class="w-5 h-5 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">1</span>Faça o PIX</li>
-                        <li class="flex items-start gap-2"><span class="w-5 h-5 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">2</span>Envie comprovante</li>
-                        <li class="flex items-start gap-2"><span class="w-5 h-5 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">3</span>Ligamos para confirmar</li>
-                        <li class="flex items-start gap-2"><span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-bold flex items-center justify-center flex-shrink-0">4</span>Receba no WhatsApp</li>
+                    <ol class="space-y-1.5 text-[10px] text-slate-300">
+                        <li class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-brand-600 text-white text-[8px] font-bold flex items-center justify-center flex-shrink-0">1</span>Faça o PIX</li>
+                        <li class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-brand-600 text-white text-[8px] font-bold flex items-center justify-center flex-shrink-0">2</span>Envie comprovante</li>
+                        <li class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-brand-600 text-white text-[8px] font-bold flex items-center justify-center flex-shrink-0">3</span>Ligamos para confirmar</li>
+                        <li class="flex items-start gap-1.5"><span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 text-[8px] font-bold flex items-center justify-center flex-shrink-0">4</span>Receba no WhatsApp</li>
                     </ol>
                 </div>
-
-                <button @click="sendPixConfirm()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
-                    <i class="fa-brands fa-whatsapp"></i> Enviar Comprovante
-                </button>
+                <button @click="goPix()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp"></i> Enviar Comprovante</button>
             </div>
         </div>
 
-        <!-- Confiança -->
-        <div class="grid grid-cols-2 gap-2 text-center">
-            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-shield-halved text-emerald-400 mb-1"></i><p class="text-[10px] font-semibold text-white">LGPD</p></div>
-            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-lock text-brand-400 mb-1"></i><p class="text-[10px] font-semibold text-white">ICP-Brasil</p></div>
-            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-database text-amber-400 mb-1"></i><p class="text-[10px] font-semibold text-white">SENATRAN</p></div>
-            <div class="p-3 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-clock text-blue-400 mb-1"></i><p class="text-[10px] font-semibold text-white">5-15 min</p></div>
+        <!-- Badges -->
+        <div class="grid grid-cols-2 gap-1.5 text-center">
+            <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-shield-halved text-emerald-400 text-xs mb-0.5"></i><p class="text-[9px] font-semibold text-white">LGPD</p></div>
+            <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-lock text-brand-400 text-xs mb-0.5"></i><p class="text-[9px] font-semibold text-white">ICP-Brasil</p></div>
+            <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-database text-amber-400 text-xs mb-0.5"></i><p class="text-[9px] font-semibold text-white">SENATRAN</p></div>
+            <div class="p-2 rounded-lg bg-slate-900/50 border border-slate-800/50"><i class="fa-solid fa-clock text-blue-400 text-xs mb-0.5"></i><p class="text-[9px] font-semibold text-white">5-15 min</p></div>
         </div>
     </div>
 </aside>
 
-<!-- Mobile sidebar direita overlay -->
-<div x-show="rightOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="rightOpen=false" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden" x-cloak></div>
-<aside x-show="rightOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="fixed top-0 right-0 w-80 h-full bg-slate-950 border-l border-slate-800 z-50 lg:hidden overflow-y-auto" x-cloak>
-    <div class="p-5 border-b border-slate-800/50 flex items-center justify-between">
-        <h3 class="text-sm font-bold text-white"><i class="fa-solid fa-headset text-brand-500 mr-2"></i>Área do Cliente</h3>
-        <button @click="rightOpen=false" class="p-2 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-    </div>
-    <div class="p-5 space-y-5">
-        <a :href="'https://wa.me/'+whatsappNumber" target="_blank" class="flex items-center gap-3 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-3 rounded-xl transition-all text-sm w-full justify-center"><i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp</a>
-        <p class="text-center text-xs text-slate-500">(84) 92183-8594</p>
-        <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4">
-            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Contratar</p>
-            <div x-show="!selectedService" class="space-y-2">
-                <button @click="selectService('crlv')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-400 flex items-center justify-center"><i class="fa-solid fa-file-lines text-xs"></i></div><div><p class="text-xs font-semibold text-white">CRLV Digital</p></div></button>
-                <button @click="selectService('completa')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-chart text-xs"></i></div><div><p class="text-xs font-semibold text-white">Consulta Completa</p></div></button>
-                <button @click="selectService('historico')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-gavel text-xs"></i></div><div><p class="text-xs font-semibold text-white">Histórico</p></div></button>
-                <button @click="selectService('proprietario')" class="w-full flex items-center gap-2.5 p-3 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-user-shield text-xs"></i></div><div><p class="text-xs font-semibold text-white">Proprietário</p></div></button>
-            </div>
-            <div x-show="selectedService" x-transition class="space-y-4" x-cloak>
-                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
-                    <div class="flex items-center gap-2 mb-3"><div :class="serviceIconBg" class="w-8 h-8 rounded-lg flex items-center justify-center"><i :class="serviceIcon" class="text-xs"></i></div><div><p class="text-xs font-semibold text-white" x-text="serviceName"></p></div></div>
-                    <div class="space-y-2 text-xs">
-                        <div class="flex justify-between"><span class="text-slate-400">Titular:</span><span class="text-white font-mono text-[10px]">ANDERSON J. C. GALVAO</span></div>
-                        <div class="flex justify-between"><span class="text-slate-400">CPF:</span><span class="text-white font-mono">081.843.074-54</span></div>
-                        <div class="flex justify-between"><span class="text-slate-400">Valor:</span><span class="font-bold text-emerald-400" x-text="formatPrice(servicePrice)"></span></div>
-                    </div>
-                    <button @click="copyPixKey()" class="w-full mt-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-semibold py-2.5 rounded-lg transition-all text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-copy"></i> <span x-text="copied?'Copiado!':'Copiar Chave'"></span></button>
+<!-- Mobile overlay + drawer direita -->
+<template x-teleport="body">
+    <div x-show="mobileRight" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="mobileRight=false" class="fixed inset-0 z-50 bg-black/60 lg:hidden" x-cloak></div>
+</template>
+<template x-teleport="body">
+    <aside x-show="mobileRight" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" class="fixed top-0 right-0 w-80 h-full bg-slate-950 border-l border-slate-800 z-50 lg:hidden sb overflow-y-auto" x-cloak>
+        <div class="p-4 border-b border-slate-800/50 flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white"><i class="fa-solid fa-headset text-brand-500 mr-2"></i>Área do Cliente</h3>
+            <button @click="mobileRight=false" class="p-1.5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="p-4 space-y-4">
+            <button @click="goWa('Olá! Gostaria de saber mais sobre a ArgoCar.')" class="w-full flex items-center justify-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-lg transition-all text-sm"><i class="fa-brands fa-whatsapp"></i> (84) 92183-8594</button>
+            <div class="bg-slate-900/50 border border-slate-800/50 rounded-xl p-3">
+                <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Contratar</p>
+                <div x-show="!svc" class="space-y-1.5">
+                    <button @click="svc='crlv'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-7 h-7 rounded-md bg-brand-500/10 text-brand-400 flex items-center justify-center"><i class="fa-solid fa-file-lines text-[10px]"></i></div><p class="text-[11px] font-semibold text-white">CRLV Digital</p></button>
+                    <button @click="svc='full'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-7 h-7 rounded-md bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-chart text-[10px]"></i></div><p class="text-[11px] font-semibold text-white">Consulta Completa</p></button>
+                    <button @click="svc='hist'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-7 h-7 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-gavel text-[10px]"></i></div><p class="text-[11px] font-semibold text-white">Histórico</p></button>
+                    <button @click="svc='ownr'" class="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-brand-500 transition-all text-left"><div class="w-7 h-7 rounded-md bg-blue-500/10 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-user-shield text-[10px]"></i></div><p class="text-[11px] font-semibold text-white">Proprietário</p></button>
                 </div>
-                <button @click="selectedService=null" class="text-slate-500 hover:text-white text-xs">← Alterar serviço</button>
-                <button @click="sendPixConfirm()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp"></i> Enviar Comprovante</button>
+                <div x-show="svc" x-transition class="space-y-3" x-cloak>
+                    <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                        <p class="text-[11px] font-semibold text-white mb-1" x-text="svcN()"></p>
+                        <p class="text-[10px] font-bold text-emerald-400 mb-2">Pagamento PIX</p>
+                        <div class="space-y-1 text-[11px]">
+                            <div class="flex justify-between"><span class="text-slate-400">Titular:</span><span class="text-white font-mono text-[10px]">ANDERSON J. C. GALVAO</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">CPF:</span><span class="text-white font-mono">081.843.074-54</span></div>
+                        </div>
+                        <button @click="copyKey()" class="w-full mt-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-semibold py-2 rounded-lg transition-all text-[11px] flex items-center justify-center gap-1.5"><i class="fa-solid fa-copy"></i> <span x-text="copied?'Copiado!':'Copiar Chave'"></span></button>
+                    </div>
+                    <button @click="svc=null" class="text-slate-500 hover:text-white text-[11px]">← Alterar</button>
+                    <button @click="goPix()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 text-sm"><i class="fa-brands fa-whatsapp"></i> Enviar Comprovante</button>
+                </div>
             </div>
         </div>
-    </div>
-</aside>
+    </aside>
+</template>
 
-</div><!-- /flex layout -->
+</div><!-- /layout -->
 
 <!-- Video Modal -->
-<div x-show="showVideo" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" @click.outside="showVideo=false" @keydown.escape.window="showVideo=false">
-    <div class="relative w-full max-w-4xl mx-4 bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
-        <button @click="showVideo=false" class="absolute top-4 right-4 z-10 p-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white rounded-full transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
-        <div class="aspect-video bg-black">
-            <video controls controlsList="nodownload" class="w-full h-full" preload="metadata">
-                <source src="assets/videos/demo.mp4" type="video/mp4">
-                Seu navegador não suporta vídeo HTML5.
-            </video>
-        </div>
+<div x-show="showVid" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" @click.outside="showVid=false" @keydown.escape.window="showVid=false">
+    <div class="relative w-full max-w-4xl mx-4 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-2xl">
+        <button @click="showVid=false" class="absolute top-3 right-3 z-10 p-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white rounded-full transition-colors"><i class="fa-solid fa-xmark"></i></button>
+        <div class="aspect-video bg-black"><video controls controlsList="nodownload" class="w-full h-full" preload="metadata"><source src="assets/videos/demo.mp4" type="video/mp4">Seu navegador não suporta vídeo.</video></div>
     </div>
 </div>
 
