@@ -1,0 +1,27 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#04254a"/>
+      <stop offset="50%" style="stop-color:#063b6f"/>
+      <stop offset="100%" style="stop-color:#004585"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0c85eb"/>
+      <stop offset="100%" style="stop-color:#25D366"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="900" cy="-100" r="400" fill="#0c85eb" opacity="0.1"/>
+  <circle cx="-100" cy="700" r="300" fill="#25D366" opacity="0.1"/>
+  
+  <text x="600" y="220" font-family="system-ui, sans-serif" font-size="28" font-weight="600" fill="#94a3b8" text-anchor="middle" letter-spacing="2">CONSULTAS VEICULARES</text>
+  
+  <text x="600" y="300" font-family="system-ui, sans-serif" font-size="64" font-weight="800" fill="white" text-anchor="middle">Argo<span fill="url(#brand)">Car</span></text>
+  
+  <text x="600" y="370" font-family="system-ui, sans-serif" font-size="24" fill="#94a3b8" text-anchor="middle">CRLV • Histórico • Score • Proprietários</text>
+  
+  <rect x="450" y="420" width="300" height="56" rx="28" fill="url(#brand)"/>
+  <text x="600" y="458" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a" text-anchor="middle">Fale no WhatsApp</text>
+  
+  <text x="600" y="550" font-family="system-ui, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">27 Estados + DF • Entrega 5-15 min • LGPD</text>
+</svg>
