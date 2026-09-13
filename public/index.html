@@ -38,6 +38,7 @@
         showVid: false,
         copied: false,
         mobileMenu: false,
+        selectedBanner: null,
         chatOpen: false,
         chatNick: '',
         chatHasNick: false,
@@ -127,6 +128,7 @@
             <button @click="nav('sec-servicos')" class="hover:text-brand-400 transition-colors">Serviços</button>
             <button @click="nav('sec-como')" class="hover:text-brand-400 transition-colors">Como Funciona</button>
             <button @click="nav('sec-vantagens')" class="hover:text-brand-400 transition-colors">Vantagens</button>
+            <button @click="nav('sec-criativos')" class="hover:text-brand-400 transition-colors">Criativos</button>
             <button @click="nav('sec-faq')" class="hover:text-brand-400 transition-colors">Dúvidas</button>
         </nav>
         <div class="flex items-center gap-3">
@@ -151,6 +153,7 @@
             <button @click="nav('sec-servicos')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-slate-900 text-slate-300">Nossos Serviços</button>
             <button @click="nav('sec-como')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-slate-900 text-slate-300">Como Funciona</button>
             <button @click="nav('sec-vantagens')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-slate-900 text-slate-300">Vantagens</button>
+            <button @click="nav('sec-criativos')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-slate-900 text-slate-300">Criativos & Campanhas</button>
             <button @click="nav('sec-faq')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-slate-900 text-slate-300">Dúvidas Frequentes</button>
         </div>
     </div>
@@ -351,6 +354,35 @@
         </div>
     </section>
 
+    <!-- ===== CRIATIVOS & CAMPANHAS ===== -->
+    <section id="sec-criativos" class="space-y-6">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-white mb-2">Criativos & Campanhas</h2>
+            <p class="text-slate-400 text-sm">Materiais de divulgação oficiais e criativos promocionais.</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+            <template x-for="img in [
+                'assets/banners/f8b46a0c-0802-487e-b337-35ba782fc8a9.jfif',
+                'assets/banners/df5e54a8-e38c-45ec-943e-35f59f333e52.jfif',
+                'assets/banners/c4fd8586-c8b2-46de-9327-e034b5f56420.jfif',
+                'assets/banners/8f5799e1-d9b4-43ba-aaba-ddeb1886d457.jfif',
+                'assets/banners/811f0c4d-97cc-4c0c-84ab-083fb81f26fd.jfif',
+                'assets/banners/761e03c4-9a64-4b8d-99b1-5191af7b3407.jfif',
+                'assets/banners/67604136-bf77-4d37-9828-0fdf93934e19.jfif',
+                'assets/banners/5f916067-51cc-4d2e-8e56-b6aa30bd4086.jfif',
+                'assets/banners/363621c0-76ba-4bb5-9987-297143b6e876.jfif',
+                'assets/banners/0ff205a6-59b5-4fdf-94c1-7daefd58486b.jfif'
+            ]">
+                <div @click="selectedBanner = img" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl group hover:border-brand-500 cursor-pointer transition-all relative">
+                    <img :src="img" alt="Criativo ArgoCar" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-brand-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="bg-slate-950/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Ampliar</span>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
     <!-- ===== DEPOIMENTOS ===== -->
     <section id="sec-depoimentos" class="space-y-6">
         <div class="text-center">
@@ -517,6 +549,14 @@
                 <button @click="sendChat()" class="bg-brand-600 hover:bg-brand-500 text-white px-4 rounded-xl font-bold transition-all"><i class="fa-solid fa-paper-plane text-xs"></i></button>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Banner Lightbox Modal -->
+<div x-show="selectedBanner" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" @click.outside="selectedBanner = null" @keydown.escape.window="selectedBanner = null" x-cloak>
+    <div class="relative max-w-4xl max-h-[95vh] overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 p-3 shadow-2xl">
+        <button @click="selectedBanner = null" class="absolute top-4 right-4 z-10 p-2.5 bg-slate-900/90 hover:bg-slate-800 text-white rounded-full transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <img :src="selectedBanner" alt="Criativo Ampliado" class="max-w-full max-h-[85vh] object-contain mx-auto rounded-xl">
     </div>
 </div>
 
