@@ -43,13 +43,30 @@
         chatNick: '',
         chatHasNick: false,
         chatInput: '',
-        chatMsgs: [
-            { id: 1, nick: 'Carlos SP', text: 'Consulta rápida e o CRLV saiu em 10 min!', time: '10:14', likes: 4, dislikes: 0, voted: null },
-            { id: 2, nick: 'Ana RS', text: 'Muito bom, evitei um veículo com leilão oculto.', time: '10:20', likes: 7, dislikes: 0, voted: null }
-        ],
+        onlineCount: 14,
+        chatMsgs: [],
         initChat(){
             const n = localStorage.getItem('argo_nick');
             if(n){ this.chatNick = n; this.chatHasNick = true; }
+            const saved = localStorage.getItem('argo_chat_msgs');
+            if(saved){
+                try { this.chatMsgs = JSON.parse(saved); } catch(e){ this.chatMsgs = this.defaultMsgs(); }
+            } else {
+                this.chatMsgs = this.defaultMsgs();
+            }
+            setInterval(() => {
+                const delta = Math.floor(Math.random() * 3) - 1;
+                this.onlineCount = Math.max(5, Math.min(48, this.onlineCount + delta));
+            }, 5000);
+        },
+        defaultMsgs(){
+            return [
+                { id: 1, nick: 'Carlos SP', text: 'Consulta rápida e o CRLV saiu em 10 min!', time: '10:14', likes: 4, dislikes: 0, voted: null },
+                { id: 2, nick: 'Ana RS', text: 'Muito bom, evitei um veículo com leilão oculto.', time: '10:20', likes: 7, dislikes: 0, voted: null }
+            ];
+        },
+        saveChat(){
+            localStorage.setItem('argo_chat_msgs', JSON.stringify(this.chatMsgs));
         },
         setNick(){
             if(this.chatNick.trim()){
@@ -69,6 +86,7 @@
                     voted: null
                 });
                 this.chatInput = '';
+                this.saveChat();
             }
         },
         likeMsg(m){
@@ -80,6 +98,7 @@
                 m.likes--;
                 m.voted = null;
             }
+            this.saveChat();
         },
         dislikeMsg(m){
             if(m.voted !== 'dislike'){
@@ -90,6 +109,7 @@
                 m.dislikes--;
                 m.voted = null;
             }
+            this.saveChat();
         },
         svcList: {
             crlv: { n:'Emissão CRLV Digital', d:'Licenciamento anual', i:'fa-solid fa-file-lines', c:'bg-brand-500/10 text-brand-400', p:0 },
@@ -501,7 +521,7 @@
                 <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white"><i class="fa-solid fa-comments text-xs"></i></div>
                 <div>
                     <h3 class="font-bold text-white text-xs">Chat & Dúvidas Online</h3>
-                    <p class="text-[10px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Comunidade Ativa</p>
+                    <p class="text-[10px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> <span x-text="onlineCount + ' pessoas online'"></span></p>
                 </div>
             </div>
             <button @click="chatOpen = false" class="text-slate-400 hover:text-white p-1.5"><i class="fa-solid fa-xmark"></i></button>
