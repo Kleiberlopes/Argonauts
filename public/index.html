@@ -122,6 +122,36 @@
                 }
             } catch(e){}
         },
+        async deleteMsg(m){
+            if(this.chatNick === 'Argonauts (ADMIN)'){
+                try {
+                    const res = await fetch('/api/chat/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: m.id, nick: this.chatNick })
+                    });
+                    if(res.ok){
+                        const data = await res.json();
+                        this.chatMsgs = data.messages;
+                    }
+                } catch(e){}
+            }
+        },
+        async clearChat(){
+            if(this.chatNick === 'Argonauts (ADMIN)' && confirm('Deseja realmente limpar todo o chat?')){
+                try {
+                    const res = await fetch('/api/chat/clear', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nick: this.chatNick })
+                    });
+                    if(res.ok){
+                        const data = await res.json();
+                        this.chatMsgs = data.messages;
+                    }
+                } catch(e){}
+            }
+        },
         svcList: {
             crlv: { n:'Emissão CRLV Digital', d:'Licenciamento anual', i:'fa-solid fa-file-lines', c:'bg-brand-500/10 text-brand-400', p:0 },
             full: { n:'Consulta Completa', d:'Débitos + Histórico + Score', i:'fa-solid fa-magnifying-glass-chart', c:'bg-emerald-500/10 text-emerald-400', p:0 },
@@ -539,7 +569,12 @@
         </div>
         <div class="bg-slate-900/90 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
             <span class="text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Ativos agora: <strong x-text="onlineCount"></strong></span>
-            <button @click="showOnlineModal = true" class="text-brand-400 hover:text-brand-300 font-bold text-[11px] underline flex items-center gap-1">Ver quem está online <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+            <div class="flex items-center gap-2">
+                <template x-if="chatNick === 'Argonauts (ADMIN)'">
+                    <button @click="clearChat()" class="text-red-400 hover:text-red-300 font-bold text-[10px] bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded transition-all">Limpar Chat</button>
+                </template>
+                <button @click="showOnlineModal = true" class="text-brand-400 hover:text-brand-300 font-bold text-[11px] underline flex items-center gap-1">Ver online <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+            </div>
         </div>
 
         <!-- Tela de Nickname -->
@@ -572,7 +607,10 @@
                             <button @click="dislikeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='dislike'?'text-red-400 font-bold':'text-slate-400 hover:text-white'">
                                 <i class="fa-solid fa-thumbs-down"></i> <span x-text="m.dislikes"></span>
                             </button>
-                            <span class="text-slate-600 ml-auto text-[10px]" x-text="m.nick===chatNick?'(Você)':''"></span>
+                            <template x-if="chatNick === 'Argonauts (ADMIN)'">
+                                <button @click="deleteMsg(m)" class="text-red-400 hover:text-red-300 text-[10px] ml-auto flex items-center gap-1 transition-colors"><i class="fa-solid fa-trash"></i> Apagar</button>
+                            </template>
+                            <span class="text-slate-600 ml-auto text-[10px]" x-show="chatNick !== 'Argonauts (ADMIN)'" x-text="m.nick===chatNick?'(Você)':''"></span>
                         </div>
                     </div>
                 </template>

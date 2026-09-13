@@ -59,6 +59,28 @@ app.post('/api/chat/vote', (req, res) => {
     }
 });
 
+// Admin: Delete message
+app.post('/api/chat/delete', (req, res) => {
+    const { id, nick } = req.body;
+    if (nick === 'Argonauts (ADMIN)') {
+        chatMessages = chatMessages.filter(m => m.id !== id);
+        res.json({ success: true, messages: chatMessages });
+    } else {
+        res.status(403).json({ success: false, error: 'Unauthorized' });
+    }
+});
+
+// Admin: Clear chat
+app.post('/api/chat/clear', (req, res) => {
+    const { nick } = req.body;
+    if (nick === 'Argonauts (ADMIN)') {
+        chatMessages = [];
+        res.json({ success: true, messages: chatMessages });
+    } else {
+        res.status(403).json({ success: false, error: 'Unauthorized' });
+    }
+});
+
 // Presence heartbeat & get online users
 app.post('/api/presence', (req, res) => {
     const { sessionId, nick } = req.body;
