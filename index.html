@@ -43,7 +43,10 @@
         chatNick: '',
         chatHasNick: false,
         chatInput: '',
-        onlineCount: 14,
+        onlineCount: 1,
+        activeUsers: [],
+        showOnlineModal: false,
+        mySessionId: 'sess_' + Math.random().toString(36).substring(2, 9),
         chatMsgs: [],
         initChat(){
             const n = localStorage.getItem('argo_nick');
@@ -54,10 +57,35 @@
             } else {
                 this.chatMsgs = this.defaultMsgs();
             }
-            setInterval(() => {
-                const delta = Math.floor(Math.random() * 3) - 1;
-                this.onlineCount = Math.max(5, Math.min(48, this.onlineCount + delta));
-            }, 5000);
+
+            const updatePresence = () => {
+                let sessions = {};
+                try { sessions = JSON.parse(localStorage.getItem('argo_presence_sessions') || '{}'); } catch(e){}
+                const now = Date.now();
+                Object.keys(sessions).forEach(id => {
+                    if(now - sessions[id].lastSeen > 10000) delete sessions[id];
+                });
+                sessions[this.mySessionId] = {
+                    nick: this.chatNick || 'Visitante Anônimo',
+                    lastSeen: now
+                };
+                localStorage.setItem('argo_presence_sessions', JSON.stringify(sessions));
+                this.activeUsers = Object.values(sessions).map(s => s.nick);
+                this.onlineCount = this.activeUsers.length;
+            };
+
+            updatePresence();
+            setInterval(updatePresence, 3000);
+
+            window.addEventListener('storage', (e) => {
+                if(e.key === 'argo_presence_sessions') {
+                    try {
+                        const sessions = JSON.parse(e.newValue || '{}');
+                        this.activeUsers = Object.values(sessions).map(s => s.nick);
+                        this.onlineCount = this.activeUsers.length;
+                    } catch(err){}
+                }
+            });
         },
         defaultMsgs(){
             return [
@@ -526,6 +554,10 @@
             </div>
             <button @click="chatOpen = false" class="text-slate-400 hover:text-white p-1.5"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="bg-slate-900/90 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
+            <span class="text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Ativos agora: <strong x-text="onlineCount"></strong></span>
+            <button @click="showOnlineModal = true" class="text-brand-400 hover:text-brand-300 font-bold text-[11px] underline flex items-center gap-1">Ver quem está online <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
+        </div>
 
         <!-- Tela de Nickname -->
         <div x-show="!chatHasNick" class="p-6 flex-1 flex flex-col justify-center text-center space-y-4">
@@ -577,6 +609,28 @@
     <div class="relative max-w-4xl max-h-[95vh] overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 p-3 shadow-2xl">
         <button @click="selectedBanner = null" class="absolute top-4 right-4 z-10 p-2.5 bg-slate-900/90 hover:bg-slate-800 text-white rounded-full transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
         <img :src="selectedBanner" alt="Criativo Ampliado" class="max-w-full max-h-[85vh] object-contain mx-auto rounded-xl">
+    </div>
+</div>
+
+<!-- Real Online Users Modal -->
+<div x-show="showOnlineModal" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4" @click.outside="showOnlineModal = false" @keydown.escape.window="showOnlineModal = false" x-cloak>
+    <div class="relative w-full max-w-sm bg-slate-950 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2"><i class="fa-solid fa-users text-brand-500"></i> Usuários Online Agora</h3>
+            <button @click="showOnlineModal = false" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="space-y-2 max-h-60 overflow-y-auto sb text-xs">
+            <template x-for="user in activeUsers">
+                <div class="flex items-center justify-between p-2.5 bg-slate-900 border border-slate-800 rounded-xl">
+                    <span class="font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span x-text="user"></span>
+                    </span>
+                    <span class="text-[10px] text-emerald-400 font-semibold">Online</span>
+                </div>
+            </template>
+        </div>
+        <p class="text-[10px] text-slate-500 text-center">Contagem baseada em sessões reais ativas no navegador.</p>
     </div>
 </div>
 
