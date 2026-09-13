@@ -557,7 +557,7 @@
         <div x-show="chatHasNick" class="flex-1 flex flex-col h-full overflow-hidden">
             <!-- Lista de Mensagens -->
             <div class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
-                <template x-for="m in chatMsgs" :key="m.id">
+                <template x-for="m in [...chatMsgs].reverse()" :key="m.id">
                     <div class="bg-slate-950/90 border border-slate-800/80 rounded-xl p-3 space-y-1.5 shadow-inner">
                         <div class="flex items-center justify-between text-[10px]">
                             <span class="font-bold text-brand-400" x-text="m.nick"></span>
