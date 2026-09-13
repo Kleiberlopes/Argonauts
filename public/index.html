@@ -51,50 +51,28 @@
         initChat(){
             const n = localStorage.getItem('argo_nick');
             if(n){ this.chatNick = n; this.chatHasNick = true; }
-            const saved = localStorage.getItem('argo_chat_msgs');
-            if(saved){
-                try { this.chatMsgs = JSON.parse(saved); } catch(e){ this.chatMsgs = this.defaultMsgs(); }
-            } else {
-                this.chatMsgs = this.defaultMsgs();
-            }
 
-            const updatePresence = () => {
-                let sessions = {};
-                try { sessions = JSON.parse(localStorage.getItem('argo_presence_sessions') || '{}'); } catch(e){}
-                const now = Date.now();
-                Object.keys(sessions).forEach(id => {
-                    if(now - sessions[id].lastSeen > 10000) delete sessions[id];
-                });
-                sessions[this.mySessionId] = {
-                    nick: this.chatNick || 'Visitante Anônimo',
-                    lastSeen: now
-                };
-                localStorage.setItem('argo_presence_sessions', JSON.stringify(sessions));
-                this.activeUsers = Object.values(sessions).map(s => s.nick);
-                this.onlineCount = this.activeUsers.length;
+            const pollServer = async () => {
+                try {
+                    const resMsg = await fetch('/api/chat');
+                    if(resMsg.ok) {
+                        this.chatMsgs = await resMsg.json();
+                    }
+                    const resPres = await fetch('/api/presence', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId: this.mySessionId, nick: this.chatNick || 'Visitante Anônimo' })
+                    });
+                    if(resPres.ok) {
+                        const data = await resPres.json();
+                        this.onlineCount = data.onlineCount;
+                        this.activeUsers = data.activeUsers;
+                    }
+                } catch(e) {}
             };
 
-            updatePresence();
-            setInterval(updatePresence, 3000);
-
-            window.addEventListener('storage', (e) => {
-                if(e.key === 'argo_presence_sessions') {
-                    try {
-                        const sessions = JSON.parse(e.newValue || '{}');
-                        this.activeUsers = Object.values(sessions).map(s => s.nick);
-                        this.onlineCount = this.activeUsers.length;
-                    } catch(err){}
-                }
-            });
-        },
-        defaultMsgs(){
-            return [
-                { id: 1, nick: 'Carlos SP', text: 'Consulta rápida e o CRLV saiu em 10 min!', time: '10:14', likes: 4, dislikes: 0, voted: null },
-                { id: 2, nick: 'Ana RS', text: 'Muito bom, evitei um veículo com leilão oculto.', time: '10:20', likes: 7, dislikes: 0, voted: null }
-            ];
-        },
-        saveChat(){
-            localStorage.setItem('argo_chat_msgs', JSON.stringify(this.chatMsgs));
+            pollServer();
+            setInterval(pollServer, 3000);
         },
         setNick(){
             if(this.chatNick.trim()){
@@ -102,42 +80,47 @@
                 localStorage.setItem('argo_nick', this.chatNick);
             }
         },
-        sendChat(){
+        async sendChat(){
             if(this.chatInput.trim() && this.chatNick.trim()){
-                this.chatMsgs.push({
-                    id: Date.now(),
-                    nick: this.chatNick,
-                    text: this.chatInput,
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                    likes: 0,
-                    dislikes: 0,
-                    voted: null
+                try {
+                    const res = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nick: this.chatNick, text: this.chatInput })
+                    });
+                    if(res.ok) {
+                        const data = await res.json();
+                        this.chatMsgs = data.messages;
+                        this.chatInput = '';
+                    }
+                } catch(e) {}
+            }
+        },
+        async likeMsg(m){
+            try {
+                const res = await fetch('/api/chat/vote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: m.id, type: 'like' })
                 });
-                this.chatInput = '';
-                this.saveChat();
-            }
+                if(res.ok) {
+                    const data = await res.json();
+                    this.chatMsgs = data.messages;
+                }
+            } catch(e){}
         },
-        likeMsg(m){
-            if(m.voted !== 'like'){
-                if(m.voted === 'dislike') m.dislikes--;
-                m.likes++;
-                m.voted = 'like';
-            } else {
-                m.likes--;
-                m.voted = null;
-            }
-            this.saveChat();
-        },
-        dislikeMsg(m){
-            if(m.voted !== 'dislike'){
-                if(m.voted === 'like') m.likes--;
-                m.dislikes++;
-                m.voted = 'dislike';
-            } else {
-                m.dislikes--;
-                m.voted = null;
-            }
-            this.saveChat();
+        async dislikeMsg(m){
+            try {
+                const res = await fetch('/api/chat/vote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: m.id, type: 'dislike' })
+                });
+                if(res.ok) {
+                    const data = await res.json();
+                    this.chatMsgs = data.messages;
+                }
+            } catch(e){}
         },
         svcList: {
             crlv: { n:'Emissão CRLV Digital', d:'Licenciamento anual', i:'fa-solid fa-file-lines', c:'bg-brand-500/10 text-brand-400', p:0 },
