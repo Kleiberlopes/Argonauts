@@ -76,9 +76,23 @@
         onlineCount: 1,
         activeUsers: [],
         showOnlineModal: false,
+        leadName: '',
+        leadPhone: '',
+        leadSubmitted: false,
         mySessionId: 'sess_' + Math.random().toString(36).substring(2, 9),
         chatMsgs: [],
         initChat(){
+            const sub = localStorage.getItem('argo_lead_submitted');
+            if(sub === 'true'){
+                this.leadSubmitted = true;
+            } else {
+                setTimeout(() => {
+                    if(!this.leadSubmitted){
+                        this.chatOpen = true;
+                    }
+                }, 4000);
+            }
+
             const n = localStorage.getItem('argo_nick');
             if(n){ this.chatNick = n; this.chatHasNick = true; }
 
@@ -108,6 +122,21 @@
             if(this.chatNick.trim()){
                 this.chatHasNick = true;
                 localStorage.setItem('argo_nick', this.chatNick);
+            }
+        },
+        async submitLead(){
+            if(this.leadName.trim() && this.leadPhone.trim()){
+                try {
+                    await fetch('/api/lead', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: this.leadName, phone: this.leadPhone, sessionId: this.mySessionId })
+                    });
+                } catch(e){}
+                localStorage.setItem('argo_lead_submitted', 'true');
+                this.leadSubmitted = true;
+                const waText = encodeURIComponent('Olá! Meu nome é ' + this.leadName + ' e meu WhatsApp é ' + this.leadPhone + '. Gostaria de iniciar atendimento e consulta veicular.');
+                window.open('https://wa.me/5584921838594?text=' + waText, '_blank');
             }
         },
         async sendChat(){
@@ -604,44 +633,63 @@
             </div>
         </div>
 
-        <div x-show="!chatHasNick" class="p-6 flex-1 flex flex-col justify-center text-center space-y-4">
-            <div class="w-12 h-12 bg-brand-500/10 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-user-tag"></i></div>
+        <!-- Lead Capture Form (Before WhatsApp/Chat) -->
+        <div x-show="!leadSubmitted" class="p-5 flex-1 flex flex-col justify-center text-center space-y-4" x-cloak>
+            <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl"><i class="fa-brands fa-whatsapp"></i></div>
             <div>
-                <h4 class="font-bold text-white text-sm mb-1">Informe seu Apelido (Nick)</h4>
-                <p class="text-[11px] text-slate-400">Entre para interagir, tirar dúvidas e avaliar comentários.</p>
+                <h4 class="font-bold text-white text-sm mb-1">Inicie seu Atendimento</h4>
+                <p class="text-[11px] text-slate-400">Preencha seu Nome e WhatsApp para consulta veicular imediata.</p>
             </div>
-            <input type="text" x-model="chatNick" placeholder="Ex: Marcos Despachante" @keydown.enter="setNick()" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
-            <button @click="setNick()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg">Entrar no Chat</button>
+            <div class="space-y-3">
+                <input type="text" x-model="leadName" placeholder="Seu Nome Completo" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
+                <input type="tel" x-model="leadPhone" placeholder="Seu WhatsApp (ex: 84999999999)" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
+                <button @click="submitLead()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3.5 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Iniciar Atendimento no WhatsApp
+                </button>
+            </div>
         </div>
 
-        <div x-show="chatHasNick" class="flex-1 flex flex-col h-full overflow-hidden">
-            <div class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
-                <template x-for="m in [...chatMsgs].reverse()" :key="m.id">
-                    <div class="bg-slate-950/90 border border-slate-800/80 rounded-xl p-3 space-y-1.5 shadow-inner">
-                        <div class="flex items-center justify-between text-[10px]">
-                            <span class="font-bold text-brand-400" x-text="m.nick"></span>
-                            <span class="text-slate-500" x-text="m.time"></span>
-                        </div>
-                        <p class="text-slate-300 leading-relaxed text-xs" x-text="m.text"></p>
-                        <div class="flex items-center gap-4 pt-1.5 border-t border-slate-900 text-[11px]">
-                            <button @click="likeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='like'?'text-emerald-400 font-bold':'text-slate-400 hover:text-white'">
-                                <i class="fa-solid fa-thumbs-up"></i> <span x-text="m.likes"></span>
-                            </button>
-                            <button @click="dislikeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='dislike'?'text-red-400 font-bold':'text-slate-400 hover:text-white'">
-                                <i class="fa-solid fa-thumbs-down"></i> <span x-text="m.dislikes"></span>
-                            </button>
-                            <template x-if="chatNick === 'Argonauts (ADMIN)'">
-                                <button @click="deleteMsg(m)" class="text-red-400 hover:text-red-300 text-[10px] ml-auto flex items-center gap-1 transition-colors"><i class="fa-solid fa-trash"></i> Apagar</button>
-                            </template>
-                            <span class="text-slate-600 ml-auto text-[10px]" x-show="chatNick !== 'Argonauts (ADMIN)'" x-text="m.nick===chatNick?'(Você)':''"></span>
-                        </div>
-                    </div>
-                </template>
+        <!-- Chat / Nickname Screen (After Lead Submitted) -->
+        <div x-show="leadSubmitted" class="flex-1 flex flex-col h-full overflow-hidden" x-cloak>
+            <div x-show="!chatHasNick" class="p-6 flex-1 flex flex-col justify-center text-center space-y-4">
+                <div class="w-12 h-12 bg-brand-500/10 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-user-tag"></i></div>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-1">Informe seu Apelido (Nick)</h4>
+                    <p class="text-[11px] text-slate-400">Entre para interagir, tirar dúvidas e avaliar comentários.</p>
+                </div>
+                <input type="text" x-model="chatNick" placeholder="Ex: Marcos Despachante" @keydown.enter="setNick()" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
+                <button @click="setNick()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg">Entrar no Chat</button>
             </div>
 
-            <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
-                <input type="text" x-model="chatInput" @keydown.enter="sendChat()" placeholder="Deixe sua dúvida ou comentário..." class="flex-1 bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2.5 text-white text-xs">
-                <button @click="sendChat()" class="bg-brand-600 hover:bg-brand-500 text-white px-4 rounded-xl font-bold transition-all"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+            <div x-show="chatHasNick" class="flex-1 flex flex-col h-full overflow-hidden">
+                <div class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+                    <template x-for="m in [...chatMsgs].reverse()" :key="m.id">
+                        <div class="bg-slate-950/90 border border-slate-800/80 rounded-xl p-3 space-y-1.5 shadow-inner">
+                            <div class="flex items-center justify-between text-[10px]">
+                                <span class="font-bold text-brand-400" x-text="m.nick"></span>
+                                <span class="text-slate-500" x-text="m.time"></span>
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-xs" x-text="m.text"></p>
+                            <div class="flex items-center gap-4 pt-1.5 border-t border-slate-900 text-[11px]">
+                                <button @click="likeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='like'?'text-emerald-400 font-bold':'text-slate-400 hover:text-white'">
+                                    <i class="fa-solid fa-thumbs-up"></i> <span x-text="m.likes"></span>
+                                </button>
+                                <button @click="dislikeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='dislike'?'text-red-400 font-bold':'text-slate-400 hover:text-white'">
+                                    <i class="fa-solid fa-thumbs-down"></i> <span x-text="m.dislikes"></span>
+                                </button>
+                                <template x-if="chatNick === 'Argonauts (ADMIN)'">
+                                    <button @click="deleteMsg(m)" class="text-red-400 hover:text-red-300 text-[10px] ml-auto flex items-center gap-1 transition-colors"><i class="fa-solid fa-trash"></i> Apagar</button>
+                                </template>
+                                <span class="text-slate-600 ml-auto text-[10px]" x-show="chatNick !== 'Argonauts (ADMIN)'" x-text="m.nick===chatNick?'(Você)':''"></span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
+                    <input type="text" x-model="chatInput" @keydown.enter="sendChat()" placeholder="Deixe sua dúvida ou comentário..." class="flex-1 bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2.5 text-white text-xs">
+                    <button @click="sendChat()" class="bg-brand-600 hover:bg-brand-500 text-white px-4 rounded-xl font-bold transition-all"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+                </div>
             </div>
         </div>
     </div>

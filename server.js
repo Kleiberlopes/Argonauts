@@ -36,6 +36,30 @@ let chatMessages = [
 ];
 
 let onlineSessions = {}; // sessionId -> { nick, lastSeen }
+let leads = []; // Captured leads (Name + WhatsApp)
+
+// Lead capture routes
+app.post('/api/lead', (req, res) => {
+    const { name, phone, sessionId } = req.body;
+    if (name && phone) {
+        const newLead = {
+            id: Date.now(),
+            name: name.trim(),
+            phone: phone.trim(),
+            sessionId: sessionId || 'unknown',
+            time: new Date().toLocaleString()
+        };
+        leads.push(newLead);
+        console.log('[NOVO LEAD CAPTURADO]', newLead);
+        res.status(200).json({ success: true, message: 'Lead registrado' });
+    } else {
+        res.status(400).json({ success: false, error: 'Missing name or phone' });
+    }
+});
+
+app.get('/api/leads', (req, res) => {
+    res.json({ success: true, count: leads.length, leads });
+});
 
 // Get chat messages
 app.get('/api/chat', (req, res) => {
