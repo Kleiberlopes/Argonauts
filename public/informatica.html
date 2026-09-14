@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArgoTech | Suporte em Informática, Formatação e Softwares à Distância</title>
+    <meta name="description" content="Serviços profissionais de informática à distância: formatação remota, instalação de softwares, otimização de PC, remoção de vírus e backup de dados. Atendimento rápido via WhatsApp.">
+    <link rel="canonical" href="https://argonauts.onrender.com/informatica.html">
+    <meta name="theme-color" content="#0066cc">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#f0f7ff',100:'#e0effe',200:'#b9dffd',300:'#7cc2fc',400:'#36a2fa',500:'#0c85eb',600:'#0066cc',700:'#0052a3',800:'#004585',900:'#063b6f',950:'#04254a' },
+                        whatsapp: '#25D366'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+        button, a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between"
+    x-data="{
+        tel: '5584921838594',
+        goWa(msg){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent(msg),'_blank'); }
+    }">
+
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-lg shadow-brand-600/30"><i class="fa-solid fa-laptop-code text-base"></i></div>
+            <div>
+                <span class="text-lg font-extrabold text-white tracking-tight">Argo<span class="text-brand-500">Tech</span></span>
+                <p class="text-[10px] text-slate-400 font-medium">Suporte & Informática Avançada</p>
+            </div>
+        </a>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-xs font-semibold text-slate-300 hover:text-white px-3 py-2 rounded-xl bg-slate-900 border border-slate-800">
+                <i class="fa-solid fa-arrow-left mr-1.5"></i> Voltar para ArgoCar
+            </a>
+            <button @click="goWa('Olá! Gostaria de saber mais sobre os serviços de informática e suporte remoto.')" class="hidden sm:flex items-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl transition-all shadow-lg text-sm">
+                <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 space-y-16 flex-1">
+
+    <!-- Hero Section -->
+    <section class="text-center space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Atendimento Remoto para Todo o Brasil
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
+            Serviços de <span class="bg-gradient-to-r from-brand-400 to-emerald-400 bg-clip-text text-transparent">Informática & Suporte à Distância</span>
+        </h1>
+        <p class="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Formatação profissional, instalação de softwares especializados, otimização de computadores e recuperação de dados sem sair de casa.
+        </p>
+    </section>
+
+    <!-- Services Grid -->
+    <section class="space-y-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-white mb-2">Nossos Serviços Especializados</h2>
+            <p class="text-slate-400 text-sm">Soluções completas com acesso remoto seguro e garantia de funcionamento.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+            <!-- Service 1 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500/50 transition-all">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-desktop"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Formatação & Instalação à Distância</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">Instalação limpa do Windows 10/11, drivers atualizados, pacotes essenciais, otimização de inicialização e ativação segura realizada inteiramente via acesso remoto (AnyDesk / TeamViewer).</p>
+                </div>
+                <button @click="goWa('Olá! Gostaria de solicitar o serviço de Formatação à Distância.')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar via WhatsApp
+                </button>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500/50 transition-all">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-box-archive"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Instalador de Softwares & Aplicativos</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">Pacote Office completo, Photoshop, CorelDRAW, AutoCAD, editores de vídeo, antivírus e ferramentas de produtividade configuradas e prontas para uso no seu computador.</p>
+                </div>
+                <button @click="goWa('Olá! Preciso de instalação e configuração de softwares.')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar via WhatsApp
+                </button>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500/50 transition-all">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-gauge-high"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Otimização & Aceleração de Sistema</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">Seu PC está travando ou lento? Realizamos limpeza profunda de arquivos temporários, remoção de vírus/malware, correção de erros do sistema e ganho real de desempenho.</p>
+                </div>
+                <button @click="goWa('Olá! Meu computador está lento e preciso de otimização.')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar via WhatsApp
+                </button>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500/50 transition-all">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-database"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Backup & Recuperação de Dados</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">Proteção e resgate de arquivos importantes. Configuração de rotinas de backup em nuvem ou HD externo e recuperação de fotos, documentos e planilhas perdidas.</p>
+                </div>
+                <button @click="goWa('Olá! Preciso de ajuda com Backup e Recuperação de Dados.')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar via WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section class="bg-gradient-to-br from-slate-900 via-brand-950/40 to-slate-900 border border-brand-500/30 rounded-2xl p-8 text-center space-y-4 shadow-2xl">
+        <h2 class="text-2xl font-extrabold text-white">Precisa de Ajuda Técnica Agora?</h2>
+        <p class="text-slate-300 text-sm max-w-lg mx-auto">Fale diretamente com um técnico especializado e resolva seu problema sem sair de casa.</p>
+        <button @click="goWa('Olá! Preciso de suporte técnico em informática.')" class="inline-flex items-center gap-2 bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold px-8 py-4 rounded-xl transition-all shadow-xl shadow-whatsapp/20 text-sm">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Chamar Técnico no WhatsApp
+        </button>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-slate-900 bg-slate-950/90 backdrop-blur-md py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5">
+            <div class="bg-brand-600 text-white p-2 rounded-xl"><i class="fa-solid fa-laptop-code text-xs"></i></div>
+            <span class="font-extrabold text-white text-sm">Argo<span class="text-brand-500">Tech</span></span>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-white transition-colors">Voltar para ArgoCar</a>
+            <span>•</span>
+            <span>Suporte Técnico Remoto</span>
+            <span>•</span>
+            <span>&copy; 2026 ArgoTech</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
