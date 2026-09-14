@@ -3,12 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArgoCar - Consultas Veiculares, CRLV e Dados de Proprietários</title>
-    <meta name="description" content="Emissão de CRLV digital, consulta de débitos, histórico veicular, score e dados de proprietários. 27 estados + DF.">
+    <title>ArgoCar | Consulta Veicular, Histórico e Emissão de CRLV Digital</title>
+    <meta name="description" content="Consulte histórico veicular completo, débitos, multas, leilão e emita seu CRLV Digital de forma rápida e segura direto pelo WhatsApp. Atendimento para todos os 27 estados.">
+    <link rel="canonical" href="https://argonauts.onrender.com/">
     <meta name="theme-color" content="#0066cc">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ArgoCar - CRLV e Consultas Veiculares">
-    <meta property="og:description" content="Emissão de CRLV, consulta de débitos, histórico, score e proprietários. Todo Brasil.">
+    <meta property="og:url" content="https://argonauts.onrender.com/">
+    <meta property="og:title" content="ArgoCar | Consulta Veicular, Histórico e Emissão de CRLV Digital">
+    <meta property="og:description" content="Consulte histórico veicular completo, débitos, multas, leilão e emita seu CRLV Digital de forma rápida e segura direto pelo WhatsApp. Atendimento para todos os 27 estados.">
+    <meta property="og:image" content="https://argonauts.onrender.com/assets/assets/images/og-preview.svg">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "ArgoCar",
+      "image": "https://argonauts.onrender.com/assets/assets/images/og-preview.svg",
+      "@id": "https://argonauts.onrender.com/",
+      "url": "https://argonauts.onrender.com/",
+      "telephone": "+5584921838594",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BR"
+      },
+      "sameAs": "https://argonauts.onrender.com/",
+      "serviceType": "Consulta Veicular e CRLV Digital"
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,10 +49,14 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
-        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        html, body { scroll-behavior: smooth; scroll-padding-top: 80px; overflow-x: hidden; width: 100%; }
         .sb::-webkit-scrollbar { width: 4px; }
         .sb::-webkit-scrollbar-track { background: transparent; }
         .sb::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        /* Touch targets >= 44px for buttons/links */
+        button, a { min-height: 44px; min-width: 44px; }
+        /* Reset min-height/width for small inline icons or specific small badges if needed */
+        .no-min-touch { min-height: auto !important; min-width: auto !important; }
     </style>
 </head>
 
