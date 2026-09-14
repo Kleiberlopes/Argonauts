@@ -263,6 +263,7 @@
         goPix(){ const s=this.svcList[this.svc]; window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent('PIX realizado para '+s?.n+'. Chave: 081.843.074-54. Enviarei comprovante.'),'_blank'); },
         goWa(msg){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent(msg),'_blank'); },
         copyKey(){ navigator.clipboard.writeText('08184307454'); this.copied=true; setTimeout(()=>this.copied=false,2000); },
+        solicitarServico(nome){ window.open('https://wa.me/'+this.tel+'?text='+encodeURIComponent('Olá! Gostaria de solicitar o serviço: '+nome+'. Poderia me informar os valores e detalhes?'),'_blank'); },
         nav(id){ this.mobileMenu=false; document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
     }" x-init="initChat()">
 
@@ -361,8 +362,68 @@
         </div>
     </section>
 
-    <!-- ===== SERVIÇOS E CONTRATAÇÃO PIX ===== -->
-    <section id="sec-servicos" class="space-y-8">
+    <!-- ===== TABELA DE PREÇOS E SERVIÇOS (CARDS RESPONSIVOS) ===== -->
+    <section id="sec-precos" class="space-y-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-white mb-2">Nossos Serviços e Valores</h2>
+            <p class="text-slate-400 text-sm">Escolha o plano ideal para sua segurança veicular com entrega imediata via PIX.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <div class="bg-slate-900 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all shadow-xl">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center mb-4"><i class="fa-solid fa-car text-base"></i></div>
+                    <h3 class="font-bold text-white text-base mb-1">Consulta Simplificada</h3>
+                    <p class="text-xs text-slate-400 mb-4">Nada consta, multas e verificação rápida da situação cadastral do veículo.</p>
+                    <div class="text-2xl font-extrabold text-white mb-4">R$ 19,90 <span class="text-xs font-normal text-slate-500">/ consulta</span></div>
+                </div>
+                <button @click="solicitarServico('Consulta Simplificada')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar Agora
+                </button>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-slate-900 border-2 border-brand-500 rounded-2xl p-6 flex flex-col justify-between transition-all shadow-2xl relative">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Mais Procurado</div>
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4"><i class="fa-solid fa-magnifying-glass-chart text-base"></i></div>
+                    <h3 class="font-bold text-white text-base mb-1">Consulta Completa de Histórico</h3>
+                    <p class="text-xs text-slate-400 mb-4">Sinistro, leilão, gravame, débitos, multas e dados completos de proprietários.</p>
+                    <div class="text-2xl font-extrabold text-white mb-4">R$ 39,90 <span class="text-xs font-normal text-slate-500">/ relatório</span></div>
+                </div>
+                <button @click="solicitarServico('Consulta Completa de Histórico')" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg shadow-whatsapp/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar Agora
+                </button>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-slate-900 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-6 flex flex-col justify-between transition-all shadow-xl">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4"><i class="fa-solid fa-file-lines text-base"></i></div>
+                    <h3 class="font-bold text-white text-base mb-1">Emissão de CRLV Digital</h3>
+                    <p class="text-xs text-slate-400 mb-4">Documento oficial em PDF válido em todo o território nacional com QR Code.</p>
+                    <div class="text-2xl font-extrabold text-white mb-4">R$ 49,90 <span class="text-xs font-normal text-slate-500">/ emissão</span></div>
+                </div>
+                <button @click="solicitarServico('Emissão de CRLV Digital')" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Solicitar Agora
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SELOS DE SEGURANÇA E GARANTIA ===== -->
+    <section class="grid sm:grid-cols-3 gap-4">
+        <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-base"><i class="fa-solid fa-shield-halved"></i></div>
+            <div><h4 class="font-bold text-white text-xs">Pagamento 100% Seguro</h4><p class="text-[10px] text-slate-400">Transações via PIX com segurança total.</p></div>
+        </div>
+        <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center flex-shrink-0 text-base"><i class="fa-solid fa-lock"></i></div>
+            <div><h4 class="font-bold text-white text-xs">Dados Protegidos (LGPD)</h4><p class="text-[10px] text-slate-400">Sigilo absoluto e conformidade oficial.</p></div>
+        </div>
+        <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 text-base"><i class="fa-solid fa-bolt"></i></div>
+            <div><h4 class="font-bold text-white text-xs">Atendimento Rápido</h4><p class="text-[10px] text-slate-400">Suporte ágil e entrega em minutos.</p></div>
+        </div>
+    </section>
         <div class="text-center">
             <h2 class="text-2xl font-bold text-white mb-2">Nossos Serviços & Contratação PIX</h2>
             <p class="text-slate-400 text-sm">Selecione o relatório desejado e realize o pagamento via PIX com entrega imediata.</p>
@@ -586,20 +647,20 @@
         </div>
         <div class="space-y-3 max-w-2xl mx-auto">
             <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <button @click="a=a===1?null:1" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Quais dados preciso fornecer?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===1?'rotate-180':''"></i></button>
-                <div x-show="a===1" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Apenas a placa ou chassi para consultas de veículos. Para dados de proprietário ou score, utilizamos o CPF/CNPJ.</div>
+                <button @click="a=a===1?null:1" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Quanto tempo demora para receber meu documento ou consulta?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===1?'rotate-180':''"></i></button>
+                <div x-show="a===1" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Envio rápido via WhatsApp/PDF logo após a confirmação.</div>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <button @click="a=a===2?null:2" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Qual o tempo de entrega?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===2?'rotate-180':''"></i></button>
-                <div x-show="a===2" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>De 5 a 15 minutos após a confirmação do pagamento via comprovante PIX enviado no WhatsApp.</div>
+                <button @click="a=a===2?null:2" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Quais dados preciso informar?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===2?'rotate-180':''"></i></button>
+                <div x-show="a===2" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Apenas a placa do veículo ou CPF do proprietário.</div>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <button @click="a=a===3?null:3" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Como funciona o pagamento?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===3?'rotate-180':''"></i></button>
-                <div x-show="a===3" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Você copia a chave PIX informada em nosso painel, realiza a transferência e envia o comprovante diretamente para nosso atendimento.</div>
+                <button @click="a=a===3?null:3" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>O CRLV Digital emitido é oficial?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===3?'rotate-180':''"></i></button>
+                <div x-show="a===3" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Sim, documento válido em todo o território nacional com QR Code de validação.</div>
             </div>
             <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <button @click="a=a===4?null:4" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>As informações são atualizadas?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===4?'rotate-180':''"></i></button>
-                <div x-show="a===4" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Sim, nossos relatórios buscam dados em tempo real nas bases oficiais do SENATRAN e órgãos estaduais.</div>
+                <button @click="a=a===4?null:4" class="w-full px-5 py-4 text-left font-bold text-white text-xs flex justify-between items-center hover:bg-slate-800/50 transition-all"><span>Quais as formas de pagamento?</span><i class="fa-solid fa-chevron-down text-xs transition-transform" :class="a===4?'rotate-180':''"></i></button>
+                <div x-show="a===4" x-collapse class="px-5 pb-4 text-xs text-slate-400 border-t border-slate-800 pt-3" x-cloak>Pagamento facilitado via PIX com liberação imediata.</div>
             </div>
         </div>
     </section>
