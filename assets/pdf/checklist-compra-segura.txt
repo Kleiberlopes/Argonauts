@@ -1,0 +1,76 @@
+# Checklist - 10 Itens Obrigatórios para Compra Segura de Veículo Usado
+# ArgoCar - Consultas Veiculares
+
+Este é um arquivo placeholder. Substitua por um PDF real gerado profissionalmente.
+
+## Como gerar o PDF real:
+1. Crie o conteúdo em Word/Google Docs/Canva
+2. Exporte como PDF
+3. Salve como: assets/pdf/checklist-compra-segura.pdf
+
+## Conteúdo sugerido:
+
+---
+
+### CHECKLIST: 10 ITENS OBRIGATÓRIOS ANTES DE COMPRAR VEÍCULO USADO
+
+✅ 1. CONSULTA COMPLETA DE PLACA/CHASSI
+   - Histórico de proprietários
+   - Débitos (IPVA, Licenciamento, Multas, DPVAT)
+   - Restrições judiciais (Renajud) e administrativas
+
+✅ 2. VERIFICAÇÃO DE LEILÃO E SINISTRO
+   - Passagem por leilão (ativo/baixado)
+   - Sinistros (colisão, enchente, incêndio)
+   - Roubo/furto (atual e histórico)
+
+✅ 3. CONFERÊNCIA FÍSICA DO VEÍCULO
+   - Chassi nos vidros e motor (originalidade)
+   - Etiquetas de identificação
+   - Numeração do motor confere com documento
+
+✅ 4. VISTORIA CAUTELAR APROVADA
+   - Laudo de empresa credenciada
+   - Estrutura, pintura, suspensão, freios
+   - Itens de segurança obrigatórios
+
+✅ 5. DOCUMENTAÇÃO DO VENDEDOR
+   - RG/CPF ou CNPJ válido
+   - Comprovante de endereço atual
+   - CRLV-e em dia (licenciamento pago)
+
+✅ 6. SCORE E CRÉDITO DO PROPRIETÁRIO
+   - Consulta Serasa/Boa Vista/SPC
+   - Ações judiciais em andamento
+   - Capacidade de quitar dívidas do veículo
+
+✅ 7. HISTÓRICO DE PROPRIETÁRIOS
+   - Quantidade de donos anteriores
+   - Tempo de posse de cada um
+   - Uso: particular, frota, locadora, táxi
+
+✅ 8. CONTRATO DE COMPRA E VENDA
+   - Dados completos de ambas as partes
+   - Valor, forma de pagamento, data
+   - Cláusula de responsabilidade por débitos anteriores
+
+✅ 9. TRANSFERÊNCIA DE PROPRIEDADE (30 DIAS)
+   - Comunicação de venda (Detran)
+   - Novo CRV em nome do comprador
+   - Vistoria para transferência (se exigida)
+
+✅ 10. SEGURO E PROTEÇÃO
+   - Cotação de seguro antes da compra
+   - Verificação de aceitação pela seguradora
+   - Cobertura para terceiros e danos próprios
+
+---
+
+### 📞 PRECISA DE AJUDA?
+ArgoCar - Consultas Veiculares
+WhatsApp: (84) 92183-8594
+Site: https://kleiberlopes.github.io/Argonauts/
+
+Atendemos: 27 Estados + Distrito Federal
+Entrega: 5-15 minutos via WhatsApp
+LGPD Compliant • Certificado Digital ICP-Brasil

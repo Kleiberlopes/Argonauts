@@ -3,33 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArgoCar | Consulta Veicular, Histórico e Emissão de CRLV Digital</title>
-    <meta name="description" content="Consulte histórico veicular completo, débitos, multas, leilão e emita seu CRLV Digital de forma rápida e segura direto pelo WhatsApp. Atendimento para todos os 27 estados.">
-    <link rel="canonical" href="https://argonauts.onrender.com/">
+    <title>ArgoCar - Consultas Veiculares, CRLV e Dados de Proprietários</title>
+    <meta name="description" content="Emissão de CRLV digital, consulta de débitos, histórico veicular, score e dados de proprietários. 27 estados + DF.">
     <meta name="theme-color" content="#0066cc">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://argonauts.onrender.com/">
-    <meta property="og:title" content="ArgoCar | Consulta Veicular, Histórico e Emissão de CRLV Digital">
-    <meta property="og:description" content="Consulte histórico veicular completo, débitos, multas, leilão e emita seu CRLV Digital de forma rápida e segura direto pelo WhatsApp. Atendimento para todos os 27 estados.">
-    <meta property="og:image" content="https://argonauts.onrender.com/assets/assets/images/og-preview.svg">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "ArgoCar",
-      "image": "https://argonauts.onrender.com/assets/assets/images/og-preview.svg",
-      "@id": "https://argonauts.onrender.com/",
-      "url": "https://argonauts.onrender.com/",
-      "telephone": "+5584921838594",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "BR"
-      },
-      "sameAs": "https://argonauts.onrender.com/",
-      "serviceType": "Consulta Veicular e CRLV Digital"
-    }
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -49,13 +25,7 @@
     </script>
     <style>
         [x-cloak] { display: none !important; }
-        html, body { scroll-behavior: smooth; scroll-padding-top: 90px; overflow-x: hidden; width: 100%; }
-        .sb::-webkit-scrollbar { width: 4px; }
-        .sb::-webkit-scrollbar-track { background: transparent; }
-        .sb::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        /* Touch targets >= 44px x 44px for buttons and links on mobile */
-        button, a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
-        .no-min-touch { min-height: auto !important; min-width: auto !important; display: inline !important; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
     </style>
 </head>
 
@@ -253,7 +223,7 @@
     </button>
 </div>
 
-<!-- ============ CONTEÚDO PRINCIPAL ============ -->
+<!-- ============ CONTEÚDO PRINCIPAL (LAYOUT CENTRALIZADO LIMPO) ============ -->
 <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 space-y-16 relative z-10">
 
     <!-- ===== INÍCIO ===== -->
@@ -415,7 +385,7 @@
                 </div>
                 <div class="flex items-start gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                     <div class="bg-brand-500/10 text-brand-400 p-2.5 rounded-xl"><i class="fa-solid fa-shield-halved text-base"></i></div>
-                    <div><h4 class="font-bold text-white text-sm mb-0.5">Sigilo absoluto</h4><p class="text-xs text-slate-400">Em conformidade total com as normas da LGPD e bases oficiais.</p></div>
+                    <div><h4 class="font-bold text-white text-sm mb-0.5">Sig absoluto</h4><p class="text-xs text-slate-400">Em conformidade total com as normas da LGPD e bases oficiais.</p></div>
                 </div>
                 <div class="flex items-start gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                     <div class="bg-brand-500/10 text-brand-400 p-2.5 rounded-xl"><i class="fa-solid fa-bolt text-base"></i></div>
@@ -465,7 +435,7 @@
                 'assets/banners/0ff205a6-59b5-4fdf-94c1-7daefd58486b.jfif'
             ]">
                 <div @click="selectedBanner = img" class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl group hover:border-brand-500 cursor-pointer transition-all relative">
-                    <img :src="img" alt="Criativo Promocional ArgoCar" loading="lazy" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300">
+                    <img :src="img" alt="Criativo ArgoCar" class="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute inset-0 bg-brand-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <span class="bg-slate-950/80 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Ampliar</span>
                     </div>
@@ -578,12 +548,15 @@
 
 <!-- ============ CHAT ONLINE FLUTUANTE ============ -->
 <div class="fixed bottom-5 right-5 z-50">
+    <!-- Botão Flutuante do Chat -->
     <button @click="chatOpen = !chatOpen" class="relative bg-brand-600 hover:bg-brand-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105">
         <i class="fa-solid fa-comments text-xl"></i>
         <span class="absolute -top-1 -right-1 bg-emerald-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full border border-slate-950 animate-pulse" x-text="chatMsgs.length"></span>
     </button>
 
+    <!-- Janela Flutuante do Chat -->
     <div x-show="chatOpen" x-transition.origin.bottom.right class="absolute bottom-16 right-0 w-80 sm:w-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[480px]" x-cloak>
+        <!-- Header do Chat -->
         <div class="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white"><i class="fa-solid fa-comments text-xs"></i></div>
@@ -604,6 +577,7 @@
             </div>
         </div>
 
+        <!-- Tela de Nickname -->
         <div x-show="!chatHasNick" class="p-6 flex-1 flex flex-col justify-center text-center space-y-4">
             <div class="w-12 h-12 bg-brand-500/10 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-user-tag"></i></div>
             <div>
@@ -614,7 +588,9 @@
             <button @click="setNick()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg">Entrar no Chat</button>
         </div>
 
+        <!-- Tela de Mensagens -->
         <div x-show="chatHasNick" class="flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Lista de Mensagens -->
             <div class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
                 <template x-for="m in [...chatMsgs].reverse()" :key="m.id">
                     <div class="bg-slate-950/90 border border-slate-800/80 rounded-xl p-3 space-y-1.5 shadow-inner">
@@ -623,6 +599,7 @@
                             <span class="text-slate-500" x-text="m.time"></span>
                         </div>
                         <p class="text-slate-300 leading-relaxed text-xs" x-text="m.text"></p>
+                        <!-- Like / Dislike -->
                         <div class="flex items-center gap-4 pt-1.5 border-t border-slate-900 text-[11px]">
                             <button @click="likeMsg(m)" class="flex items-center gap-1.5 transition-colors" :class="m.voted==='like'?'text-emerald-400 font-bold':'text-slate-400 hover:text-white'">
                                 <i class="fa-solid fa-thumbs-up"></i> <span x-text="m.likes"></span>
@@ -639,6 +616,7 @@
                 </template>
             </div>
 
+            <!-- Barra de Envio -->
             <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
                 <input type="text" x-model="chatInput" @keydown.enter="sendChat()" placeholder="Deixe sua dúvida ou comentário..." class="flex-1 bg-slate-900 border border-slate-800 focus:border-brand-500 rounded-xl px-3 py-2.5 text-white text-xs">
                 <button @click="sendChat()" class="bg-brand-600 hover:bg-brand-500 text-white px-4 rounded-xl font-bold transition-all"><i class="fa-solid fa-paper-plane text-xs"></i></button>
@@ -651,7 +629,7 @@
 <div x-show="selectedBanner" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" @click.outside="selectedBanner = null" @keydown.escape.window="selectedBanner = null" x-cloak>
     <div class="relative max-w-4xl max-h-[95vh] overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 p-3 shadow-2xl">
         <button @click="selectedBanner = null" class="absolute top-4 right-4 z-10 p-2.5 bg-slate-900/90 hover:bg-slate-800 text-white rounded-full transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
-        <img :src="selectedBanner" alt="Criativo Ampliado ArgoCar" loading="lazy" class="max-w-full max-h-[85vh] object-contain mx-auto rounded-xl">
+        <img :src="selectedBanner" alt="Criativo Ampliado" class="max-w-full max-h-[85vh] object-contain mx-auto rounded-xl">
     </div>
 </div>
 
