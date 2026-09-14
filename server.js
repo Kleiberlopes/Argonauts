@@ -10,6 +10,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Keep-Alive / Health check routes
+app.get('/ping', (req, res) => {
+    res.status(200).send('OK');
+});
+app.get('/healthz', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Self-ping to prevent Render sleep mode (every 10 minutes)
+setInterval(() => {
+    const url = process.env.RENDER_EXTERNAL_URL || 'https://argonauts.onrender.com';
+    const https = require('https');
+    https.get(`${url}/ping`, (res) => {
+        // Ping success
+    }).on('error', (err) => {
+        // Suppress network errors on local/offline self-ping
+    });
+}, 600000);
+
 // In-memory real-time chat & presence store
 let chatMessages = [
     { id: 1, nick: 'Carlos SP', text: 'Consulta rápida e o CRLV saiu em 10 min!', time: '10:14', likes: 4, dislikes: 0, voted: null },
