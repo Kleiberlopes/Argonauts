@@ -117,6 +117,64 @@
         </div>
     </section>
 
+    <!-- ===== PROBLEMAS FREQUENTES (CARDS VISUAIS) ===== -->
+    <section class="space-y-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-white mb-2">Seu dispositivo está com algum desses problemas?</h2>
+            <p class="text-slate-400 text-sm">Clique no card correspondente para falar com nosso técnico imediatamente.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+            <!-- Card 1 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500 hover:-translate-y-1 transition-all duration-300">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">PC não liga / Tela Azul de Erro</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-6">Computador reiniciando sozinho, tela azul da morte (BSOD), erro de boot BCD ou travamento antes de carregar o sistema operacional.</p>
+                </div>
+                <button @click="goWa('Olá! Meu PC/Notebook deu tela azul e não liga. Como funciona o reparo?')" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg shadow-whatsapp/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Resolver Este Problema no WhatsApp
+                </button>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500 hover:-translate-y-1 transition-all duration-300">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Computador Muito Lento ou Travando</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-6">Lentidão extrema, programas demorando a abrir, travamentos constantes ou disco em 100% de uso. Otimizamos seu sistema para rodar liso.</p>
+                </div>
+                <button @click="goWa('Olá! Meu computador está muito lento e travando. Quero otimizar.')" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg shadow-whatsapp/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Turbinar Meu PC no WhatsApp
+                </button>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500 hover:-translate-y-1 transition-all duration-300">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Celular Travado na Logo / Loop Infinito</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-6">Smartphone Android travado na tela inicial da marca, reiniciando direto ou sem conseguir carregar o sistema operacional após atualização.</p>
+                </div>
+                <button @click="goWa('Olá! Meu celular Android travou na tela inicial e não liga.')" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg shadow-whatsapp/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Recuperar Celular no WhatsApp
+                </button>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-brand-500 hover:-translate-y-1 transition-all duration-300">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-wifi"></i></div>
+                    <h3 class="font-bold text-white text-base mb-2">Sem Acesso à Internet / Wi-Fi Parou</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-6">Problemas de conexão Wi-Fi, cabo de rede desconectado, placa de rede sem driver ou sem navegar mesmo com conexão ativa.</p>
+                </div>
+                <button @click="goWa('Olá! O Wi-Fi do meu computador parou de funcionar.')" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-extrabold py-3 rounded-xl text-xs transition-all shadow-lg shadow-whatsapp/20 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Corrigir Wi-Fi no WhatsApp
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Cards de Serviços Especializados -->
     <section class="space-y-8">
         <div class="text-center">
