@@ -89,6 +89,7 @@
                 setTimeout(() => {
                     if(!this.leadSubmitted){
                         this.chatOpen = true;
+                        this.playNotificationSound();
                     }
                 }, 4000);
             }
@@ -118,26 +119,60 @@
             pollServer();
             setInterval(pollServer, 3000);
         },
-        setNick(){
-            if(this.chatNick.trim()){
-                this.chatHasNick = true;
-                localStorage.setItem('argo_nick', this.chatNick);
-            }
+        playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            } catch(e) {}
         },
-        async submitLead(){
-            if(this.leadName.trim() && this.leadPhone.trim()){
-                try {
-                    await fetch('/api/lead', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: this.leadName, phone: this.leadPhone, sessionId: this.mySessionId })
-                    });
-                } catch(e){}
-                localStorage.setItem('argo_lead_submitted', 'true');
-                this.leadSubmitted = true;
-                const waText = encodeURIComponent('Olá! Meu nome é ' + this.leadName + ' e meu WhatsApp é ' + this.leadPhone + '. Gostaria de iniciar atendimento e consulta veicular.');
-                window.open('https://wa.me/5584921838594?text=' + waText, '_blank');
-            }
+        async startWhatsApp() {
+            const name = (this.leadName || '').trim() || 'Cliente';
+            try {
+                await fetch('/api/lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, channel: 'whatsapp', sessionId: this.mySessionId })
+                });
+            } catch(e){}
+            localStorage.setItem('argo_lead_submitted', 'true');
+            this.leadSubmitted = true;
+            const msg = `Olá! Sou ${name} (vim do site) e gostaria de tirar uma dúvida.`;
+            window.open('https://wa.me/5584921838594?text=' + encodeURIComponent(msg), '_blank');
+        },
+        async startWebChat() {
+            const name = (this.leadName || '').trim() || 'Cliente';
+            try {
+                await fetch('/api/lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, channel: 'web_chat', sessionId: this.mySessionId })
+                });
+            } catch(e){}
+            localStorage.setItem('argo_lead_submitted', 'true');
+            this.leadSubmitted = true;
+            this.chatNick = name;
+            this.chatHasNick = true;
+            localStorage.setItem('argo_nick', name);
+            const welcomeMsg = {
+                id: Date.now(),
+                nick: 'Atendimento ArgoCar',
+                text: `Olá ${name}! Como posso te ajudar com sua consulta veicular hoje?`,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                likes: 0,
+                dislikes: 0,
+                voted: null
+            };
+            this.chatMsgs.push(welcomeMsg);
         },
         async sendChat(){
             if(this.chatInput.trim() && this.chatNick.trim()){
@@ -637,14 +672,16 @@
         <div x-show="!leadSubmitted" class="p-5 flex-1 flex flex-col justify-center text-center space-y-4" x-cloak>
             <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl"><i class="fa-brands fa-whatsapp"></i></div>
             <div>
-                <h4 class="font-bold text-white text-sm mb-1">Inicie seu Atendimento</h4>
-                <p class="text-[11px] text-slate-400">Preencha seu Nome e WhatsApp para consulta veicular imediata.</p>
+                <h4 class="font-bold text-white text-sm mb-1">Como prefere ser atendido?</h4>
+                <p class="text-[11px] text-slate-400">Informe seu nome e escolha uma das opções abaixo:</p>
             </div>
             <div class="space-y-3">
-                <input type="text" x-model="leadName" placeholder="Seu Nome Completo" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
-                <input type="tel" x-model="leadPhone" placeholder="Seu WhatsApp (ex: 84999999999)" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
-                <button @click="submitLead()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3.5 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-base"></i> Iniciar Atendimento no WhatsApp
+                <input type="text" x-model="leadName" placeholder="Seu Nome" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-500 rounded-xl px-4 py-3 text-white text-xs text-center font-semibold">
+                <button @click="startWhatsApp()" class="w-full bg-whatsapp hover:bg-emerald-500 text-slate-950 font-bold py-3.5 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Falar no WhatsApp
+                </button>
+                <button @click="startWebChat()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-comments text-base"></i> Conversar pelo Chat do Site
                 </button>
             </div>
         </div>

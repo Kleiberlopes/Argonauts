@@ -40,21 +40,17 @@ let leads = []; // Captured leads (Name + WhatsApp)
 
 // Lead capture routes
 app.post('/api/lead', (req, res) => {
-    const { name, phone, sessionId } = req.body;
-    if (name && phone) {
-        const newLead = {
-            id: Date.now(),
-            name: name.trim(),
-            phone: phone.trim(),
-            sessionId: sessionId || 'unknown',
-            time: new Date().toLocaleString()
-        };
-        leads.push(newLead);
-        console.log('[NOVO LEAD CAPTURADO]', newLead);
-        res.status(200).json({ success: true, message: 'Lead registrado' });
-    } else {
-        res.status(400).json({ success: false, error: 'Missing name or phone' });
-    }
+    const { name, channel, sessionId } = req.body;
+    const leadData = {
+        id: Date.now(),
+        name: (name || 'Cliente').trim(),
+        channel: channel || 'unknown',
+        sessionId: sessionId || 'unknown',
+        timestamp: new Date().toISOString()
+    };
+    leads.push(leadData);
+    console.log('[NOVO ATENDIMENTO]', leadData);
+    res.status(200).json({ success: true, message: 'Lead registrado' });
 });
 
 app.get('/api/leads', (req, res) => {
